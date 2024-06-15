@@ -38,22 +38,14 @@ class ModelRegression(str, Enum):
     en = "Elastic Net"
     lar = "Least Angle Regression
     llar = "Lasso Least Angle Regression"
-
-‘omp’ - Orthogonal Matching Pursuit
-
-‘br’ - Bayesian Ridge
-
-‘ard’ - Automatic Relevance Determination
-
-‘par’ - Passive Aggressive Regressor
-
-‘ransac’ - Random Sample Consensus
-
-‘tr’ - TheilSen Regressor
-
-‘huber’ - Huber Regressor
-
-‘kr’ - Kernel Ridge
+    omp = "Orthogonal Matching Pursuit"
+    br = "Bayesian Ridge"
+    ard = "Automatic Relevance Determination"
+    par = "Passive Aggressive Regressor"
+    ransac = "Random Sample Consensus"
+    tr = "TheilSen Regressor"
+    huber = "Huber Regressor"
+    kr = "Kernel Ridge"
 
 ‘svm’ - Support Vector Regression
 
@@ -73,7 +65,7 @@ class ModelRegression(str, Enum):
 
 ‘xgboost’ - Extreme Gradient Boosting
 
-‘lightgbm’ - Light Gradient Boosting Machine
+      lightgbm = "Light Gradient Boosting Machine"
 
 ‘catboost’ - CatBoost Regressor
 
