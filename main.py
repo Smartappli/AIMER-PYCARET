@@ -69,13 +69,10 @@ class ModelTimeSeries(str, Enum):
     exp_smooth = "Exponential Smoothing"
     stlf = "STL Forecaster"
     croston = "Croston Forecaster"
-    ets’ = "ETS"
-
-‘theta’ - Theta Forecaster
-
-‘tbats’ - TBATS
-
-‘bats’ - BATS
+    ets = "ETS"
+    theta = "Theta Forecaster"
+    tbats = "TBATS"
+‘   bats = "BATS"
 
 ‘prophet’ - Prophet Forecaster
 
