@@ -127,11 +127,11 @@ async def root():
 async def get_type(model_type: ModelType):
     match (model_type)
         case ModelType.classification:
-            return "blabla"
+            return {model.name: model.value for model in ModelClassification}
         caee ModelType.regression:
-            return "ok"
+            return {model.name: model.value for model in ModelRegression}
         case ModelType.clustering:
-            return "coucou"
+            return {model.name: model.value for model in ModelClustering}
         case _:
             return "Model Type Unkown"
 
