@@ -31,6 +31,55 @@ class ModelClassification(str, Enum):
     catboost = "CatBoost Classifier"
 
 
+class ModelRegression(str, Enum):
+    lr = "Linear Regression"
+    lasso = "Lasso Regression"
+    ridge = "Ridge Regression"11
+
+‘en’ - Elastic Net
+
+‘lar’ - Least Angle Regression
+
+‘llar’ - Lasso Least Angle Regression
+
+‘omp’ - Orthogonal Matching Pursuit
+
+‘br’ - Bayesian Ridge
+
+‘ard’ - Automatic Relevance Determination
+
+‘par’ - Passive Aggressive Regressor
+
+‘ransac’ - Random Sample Consensus
+
+‘tr’ - TheilSen Regressor
+
+‘huber’ - Huber Regressor
+
+‘kr’ - Kernel Ridge
+
+‘svm’ - Support Vector Regression
+
+‘knn’ - K Neighbors Regressor
+
+‘dt’ - Decision Tree Regressor
+
+‘rf’ - Random Forest Regressor
+
+‘et’ - Extra Trees Regressor
+
+‘ada’ - AdaBoost Regressor
+
+‘gbr’ - Gradient Boosting Regressor
+
+‘mlp’ - MLP Regressor
+
+‘xgboost’ - Extreme Gradient Boosting
+
+‘lightgbm’ - Light Gradient Boosting Machine
+
+‘catboost’ - CatBoost Regressor
+
 @app.get("/")
 async def root():
     return {pycaret.__version__}
