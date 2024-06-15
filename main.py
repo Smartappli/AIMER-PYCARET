@@ -36,10 +36,8 @@ class ModelRegression(str, Enum):
     lasso = "Lasso Regression"
     ridge = "Ridge Regression"11
     en = "Elastic Net"
-
-‘lar’ - Least Angle Regression
-
-‘llar’ - Lasso Least Angle Regression
+    lar = "Least Angle Regression
+    llar = "Lasso Least Angle Regression"
 
 ‘omp’ - Orthogonal Matching Pursuit
 
