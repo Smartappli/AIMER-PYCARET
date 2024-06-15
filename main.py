@@ -87,11 +87,9 @@ llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending
     rf_cds_dt = "Random Forest w/ Cond. Deseasonalize & Detrending"
     et_cds_dt = *Extra Trees w/ Cond. Deseasonalize & Detrending"
     gbr_cds_dt = "Gradient Boosting w/ Cond. Deseasonalize & Detrending"
-‘ada_cds_dt’ - AdaBoost w/ Cond. Deseasonalize & Detrending
-
-‘lightgbm_cds_dt’ - Light Gradient Boosting w/ Cond. Deseasonalize & Detrending
-
-‘catboost_cds_dt’ - CatBoost w/ Cond. Deseasonalize & Detrending
+    ada_cds_dt = "AdaBoost w/ Cond. Deseasonalize & Detrending"
+    lightgbm_cds_dt = "Light Gradient Boosting w/ Cond. Deseasonalize & Detrending"
+    catboost_cds_dt = "CatBoost w/ Cond. Deseasonalize & Detrending"
 
 @app.get("/")
 async def root():
