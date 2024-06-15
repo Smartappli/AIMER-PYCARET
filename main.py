@@ -103,6 +103,22 @@ class ModelClustering(str, Enum):
     birch = "Birch Clustering"
     kmodes = "K-Modes Clustering"
 
+
+class ModelAnomalyDetection(str, Enum):
+    abod = "Angle-base Outlier Detection"
+    cluster = "Clustering-Based Local Outlier"
+    cof = "Connectivity-Based Outlier Factor"
+    histogram = "Histogram-based Outlier Detection"
+    iforest = "Isolation Forest"
+    knn = "k-Nearest Neighbors Detector"
+    lof = "Local Outlier Factor"
+    svm = "One-class SVM detector"
+    pca = "Principal Component Analysis"
+    mcd = "Minimum Covariance Determinant"
+    sod = "Subspace Outlier Detection"
+    sos = "Stochastic Outlier Selection"
+
+
 @app.get("/")
 async def root():
     return {pycaret.__version__}
