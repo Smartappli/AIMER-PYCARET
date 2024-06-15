@@ -36,7 +36,7 @@ class ModelRegression(str, Enum):
     lasso = "Lasso Regression"
     ridge = "Ridge Regression"11
     en = "Elastic Net"
-    lar = "Least Angle Regression
+    lar = "Least Angle Regression"
     llar = "Lasso Least Angle Regression"
     omp = "Orthogonal Matching Pursuit"
     br = "Bayesian Ridge"
@@ -75,22 +75,14 @@ class ModelTimeSeries(str, Enum):
 ‘   bats = "BATS"
     prophet = "Prophet Forecaster"
     lr_cds_dt = "Linear w/ Cond. Deseasonalize & Detrending"
-
-‘en_cds_dt’ - Elastic Net w/ Cond. Deseasonalize & Detrending
-
-‘ridge_cds_dt’ - Ridge w/ Cond. Deseasonalize & Detrending
-
-‘lasso_cds_dt’ - Lasso w/ Cond. Deseasonalize & Detrending
-
-‘llar_cds_dt’ - Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending
-
-‘br_cds_dt’ - Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending
-
-‘huber_cds_dt’ - Huber w/ Cond. Deseasonalize & Detrending
-
-‘omp_cds_dt’ - Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending
-
-‘knn_cds_dt’ - K Neighbors w/ Cond. Deseasonalize & Detrending
+    en_cds_dt = "Elastic Net w/ Cond. Deseasonalize & Detrending"
+    ridge_cds_dt = "Ridge w/ Cond. Deseasonalize & Detrending"
+    lasso_cds_dt = "Lasso w/ Cond. Deseasonalize & Detrending"
+llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending"
+    br_cds_dt = "Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending"
+    huber_cds_dt = 'Huber w/ Cond. Deseasonalize & Detrending"
+    omp_cds_dt = "Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending"
+    knn_cds_d = "K Neighbors w/ Cond. Deseasonalize & Detrending"
 
 ‘dt_cds_dt’ - Decision Tree w/ Cond. Deseasonalize & Detrending
 
