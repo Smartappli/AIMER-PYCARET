@@ -58,6 +58,59 @@ class ModelRegression(str, Enum):
     lightgbm = "Light Gradient Boosting Machine"
     catboost = "CatBoost Regressor"
 
+
+class ModelTimeSeries(str, Enum):
+    naive = "Naive Forecaster"
+    grand_means = "Grand Means Forecaster"
+    snaiv = "Seasonal Naive Forecaster"
+    polytrend = "Polynomial Trend Forecaster"
+    arima = "ARIMA family of models (ARIMA, SARIMA, SARIMAX)"
+    auto_arima = "Auto ARIMA"
+    exp_smooth = "Exponential Smoothing"
+    stlf = "STL Forecaster"
+    croston = "Croston Forecaster"
+    ets’ = "ETS"
+
+‘theta’ - Theta Forecaster
+
+‘tbats’ - TBATS
+
+‘bats’ - BATS
+
+‘prophet’ - Prophet Forecaster
+
+‘lr_cds_dt’ - Linear w/ Cond. Deseasonalize & Detrending
+
+‘en_cds_dt’ - Elastic Net w/ Cond. Deseasonalize & Detrending
+
+‘ridge_cds_dt’ - Ridge w/ Cond. Deseasonalize & Detrending
+
+‘lasso_cds_dt’ - Lasso w/ Cond. Deseasonalize & Detrending
+
+‘llar_cds_dt’ - Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending
+
+‘br_cds_dt’ - Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending
+
+‘huber_cds_dt’ - Huber w/ Cond. Deseasonalize & Detrending
+
+‘omp_cds_dt’ - Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending
+
+‘knn_cds_dt’ - K Neighbors w/ Cond. Deseasonalize & Detrending
+
+‘dt_cds_dt’ - Decision Tree w/ Cond. Deseasonalize & Detrending
+
+‘rf_cds_dt’ - Random Forest w/ Cond. Deseasonalize & Detrending
+
+‘et_cds_dt’ - Extra Trees w/ Cond. Deseasonalize & Detrending
+
+‘gbr_cds_dt’ - Gradient Boosting w/ Cond. Deseasonalize & Detrending
+
+‘ada_cds_dt’ - AdaBoost w/ Cond. Deseasonalize & Detrending
+
+‘lightgbm_cds_dt’ - Light Gradient Boosting w/ Cond. Deseasonalize & Detrending
+
+‘catboost_cds_dt’ - CatBoost w/ Cond. Deseasonalize & Detrending
+
 @app.get("/")
 async def root():
     return {pycaret.__version__}
