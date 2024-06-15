@@ -80,18 +80,13 @@ class ModelTimeSeries(str, Enum):
     lasso_cds_dt = "Lasso w/ Cond. Deseasonalize & Detrending"
 llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending"
     br_cds_dt = "Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending"
-    huber_cds_dt = 'Huber w/ Cond. Deseasonalize & Detrending"
+    huber_cds_dt = "Huber w/ Cond. Deseasonalize & Detrending"
     omp_cds_dt = "Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending"
     knn_cds_d = "K Neighbors w/ Cond. Deseasonalize & Detrending"
-
-‘dt_cds_dt’ - Decision Tree w/ Cond. Deseasonalize & Detrending
-
-‘rf_cds_dt’ - Random Forest w/ Cond. Deseasonalize & Detrending
-
-‘et_cds_dt’ - Extra Trees w/ Cond. Deseasonalize & Detrending
-
-‘gbr_cds_dt’ - Gradient Boosting w/ Cond. Deseasonalize & Detrending
-
+    dt_cds_dt = "Decision Tree w/ Cond. Deseasonalize & Detrending"
+    rf_cds_dt = "Random Forest w/ Cond. Deseasonalize & Detrending"
+    et_cds_dt = *Extra Trees w/ Cond. Deseasonalize & Detrending"
+    gbr_cds_dt = "Gradient Boosting w/ Cond. Deseasonalize & Detrending"
 ‘ada_cds_dt’ - AdaBoost w/ Cond. Deseasonalize & Detrending
 
 ‘lightgbm_cds_dt’ - Light Gradient Boosting w/ Cond. Deseasonalize & Detrending
