@@ -54,7 +54,7 @@ class ModelRegression(str, Enum):
     ada = "AdaBoost Regressor"
     gbr = "Gradient Boosting Regressor"
     mlp = "MLP Regressor"
-    xgboost = "Extreme Gradient Boosting
+    xgboost = "Extreme Gradient Boosting"
     lightgbm = "Light Gradient Boosting Machine"
     catboost = "CatBoost Regressor"
 
@@ -73,10 +73,8 @@ class ModelTimeSeries(str, Enum):
     theta = "Theta Forecaster"
     tbats = "TBATS"
 ‘   bats = "BATS"
-
-‘prophet’ - Prophet Forecaster
-
-‘lr_cds_dt’ - Linear w/ Cond. Deseasonalize & Detrending
+    prophet = "Prophet Forecaster"
+    lr_cds_dt = "Linear w/ Cond. Deseasonalize & Detrending"
 
 ‘en_cds_dt’ - Elastic Net w/ Cond. Deseasonalize & Detrending
 
