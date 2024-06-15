@@ -35,8 +35,7 @@ class ModelRegression(str, Enum):
     lr = "Linear Regression"
     lasso = "Lasso Regression"
     ridge = "Ridge Regression"11
-
-‘en’ - Elastic Net
+    en = "Elastic Net"
 
 ‘lar’ - Least Angle Regression
 
