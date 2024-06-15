@@ -46,28 +46,17 @@ class ModelRegression(str, Enum):
     tr = "TheilSen Regressor"
     huber = "Huber Regressor"
     kr = "Kernel Ridge"
-
-‘svm’ - Support Vector Regression
-
-‘knn’ - K Neighbors Regressor
-
-‘dt’ - Decision Tree Regressor
-
-‘rf’ - Random Forest Regressor
-
-‘et’ - Extra Trees Regressor
-
-‘ada’ - AdaBoost Regressor
-
-‘gbr’ - Gradient Boosting Regressor
-
-‘mlp’ - MLP Regressor
-
-‘xgboost’ - Extreme Gradient Boosting
-
-      lightgbm = "Light Gradient Boosting Machine"
-
-‘catboost’ - CatBoost Regressor
+    svm = "Support Vector Regression"
+    knn = "K Neighbors Regressor"
+    dt = "Decision Tree Regressor"
+    rf = "Random Forest Regressor"
+    et = "Extra Trees Regressor"
+    ada = "AdaBoost Regressor"
+    gbr = "Gradient Boosting Regressor"
+    mlp = "MLP Regressor"
+    xgboost = "Extreme Gradient Boosting
+    lightgbm = "Light Gradient Boosting Machine"
+    catboost = "CatBoost Regressor"
 
 @app.get("/")
 async def root():
