@@ -91,6 +91,18 @@ llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending
     lightgbm_cds_dt = "Light Gradient Boosting w/ Cond. Deseasonalize & Detrending"
     catboost_cds_dt = "CatBoost w/ Cond. Deseasonalize & Detrending"
 
+
+class ModelClustering(str, Enum):
+    kmeans = "K-Means Clustering"
+    ap = "Affinity Propagation"
+    meanshift = "Mean shift Clustering"
+    sc = "Spectral Clustering"
+    hclust = "Agglomerative Clustering"
+    dbscan = "Density-Based Spatial Clustering"
+    optics = "OPTICS Clustering"
+    birch = "Birch Clustering"
+    kmodes = "K-Modes Clustering"
+
 @app.get("/")
 async def root():
     return {pycaret.__version__}
