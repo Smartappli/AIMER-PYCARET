@@ -1,6 +1,8 @@
 from enum import Enum
 from fastapi import FastAPI
+from typing import Any, Dict, Optional
 import pycaret
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -8,7 +10,7 @@ class ModelType(str, Enum):
     classification = "classification"
     regression = "regression"
     clustering = "clustering"
-
+    anomaly_detection = "anomaly_detection"
 
 class ModelClassification(str, Enum):
     lr = "Logistic Regression"
@@ -31,10 +33,23 @@ class ModelClassification(str, Enum):
     catboost = "CatBoost Classifier"
 
 
+class ClassificationParams(BaseModel):
+    estimator: str | Any
+    fold: Optional[int | Any] = None
+    round: int = 4,
+    cross_validation: bool = True
+    fit_kwargs: Optional[dict] = None
+    groups: Optional[str | Any] = None
+    experiment_custom_tags: Optional[Dict[str, Any]] = None
+    probability_threshold: Optional[float] = None
+    engine: Optional[str] = None
+    verbose: bool = True
+    return_train_score: bool = False
+
 class ModelRegression(str, Enum):
     lr = "Linear Regression"
     lasso = "Lasso Regression"
-    ridge = "Ridge Regression"11
+    ridge = "Ridge Regression"
     en = "Elastic Net"
     lar = "Least Angle Regression"
     llar = "Lasso Least Angle Regression"
@@ -58,7 +73,6 @@ class ModelRegression(str, Enum):
     lightgbm = "Light Gradient Boosting Machine"
     catboost = "CatBoost Regressor"
 
-
 class ModelTimeSeries(str, Enum):
     naive = "Naive Forecaster"
     grand_means = "Grand Means Forecaster"
@@ -72,13 +86,13 @@ class ModelTimeSeries(str, Enum):
     ets = "ETS"
     theta = "Theta Forecaster"
     tbats = "TBATS"
-‘   bats = "BATS"
+    bats = "BATS"
     prophet = "Prophet Forecaster"
     lr_cds_dt = "Linear w/ Cond. Deseasonalize & Detrending"
     en_cds_dt = "Elastic Net w/ Cond. Deseasonalize & Detrending"
     ridge_cds_dt = "Ridge w/ Cond. Deseasonalize & Detrending"
     lasso_cds_dt = "Lasso w/ Cond. Deseasonalize & Detrending"
-llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending"
+    llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending"
     br_cds_dt = "Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending"
     huber_cds_dt = "Huber w/ Cond. Deseasonalize & Detrending"
     omp_cds_dt = "Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending"
@@ -91,7 +105,6 @@ llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending
     lightgbm_cds_dt = "Light Gradient Boosting w/ Cond. Deseasonalize & Detrending"
     catboost_cds_dt = "CatBoost w/ Cond. Deseasonalize & Detrending"
 
-
 class ModelClustering(str, Enum):
     kmeans = "K-Means Clustering"
     ap = "Affinity Propagation"
@@ -102,7 +115,6 @@ class ModelClustering(str, Enum):
     optics = "OPTICS Clustering"
     birch = "Birch Clustering"
     kmodes = "K-Modes Clustering"
-
 
 class ModelAnomalyDetection(str, Enum):
     abod = "Angle-base Outlier Detection"
@@ -118,23 +130,28 @@ class ModelAnomalyDetection(str, Enum):
     sod = "Subspace Outlier Detection"
     sos = "Stochastic Outlier Selection"
 
-
 @app.get("/")
 async def root():
-    return {pycaret.__version__}
+    return {"pycaret_version": pycaret.__version__}
 
-@app.get("/type/{model_type}")
+@app.get("/model/{model_type}")
 async def get_type(model_type: ModelType):
-    match (model_type)
-        case ModelType.classification:
-            return {model.name: model.value for model in ModelClassification}
-        caee ModelType.regression:
-            return {model.name: model.value for model in ModelRegression}
-        case ModelType.clustering:
-            return {model.name: model.value for model in ModelClustering}
-        case _:
-            return "Model Type Unkown"
+    if model_type == ModelType.classification:
+        return {model.name: model.value for model in ModelClassification}
+    elif model_type == ModelType.regression:
+        return {model.name: model.value for model in ModelRegression}
+    elif model_type == ModelType.clustering:
+        return {model.name: model.value for model in ModelClustering}
+    elif model_type == ModelType.anomaly_detection:
+        return {model.name: model.value for model in ModelAnomalyDetection}
+    else:
+        return {"error": "Model Type Unknown"}
 
-@app.get("/models/{model_name}")
-async def get_model(model_name: ModelName):
-    return model_name
+@app.get("/type/{model_name}")
+async def get_model(model_name: ModelType):
+    return {"model_name": model_name}
+
+@app.post("/model/{model_type")
+async def create_model(model_type: ModelType):
+    if model_type == ModelType.classification:
+        return {"model_name": model_type.name}
