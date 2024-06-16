@@ -1,4 +1,4 @@
 fastapi>=0.111.0,<0.113.0
 hypercorn==0.17.3
-pycaret[full]==3.3.2
+pycaret[full]
 pydantic>=2.7.0,<3.0.0
