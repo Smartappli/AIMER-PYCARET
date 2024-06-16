@@ -6,11 +6,13 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+
 class ModelType(str, Enum):
     classification = "classification"
     regression = "regression"
     clustering = "clustering"
     anomaly_detection = "anomaly_detection"
+
 
 class ModelClassification(str, Enum):
     lr = "Logistic Regression"
@@ -36,7 +38,7 @@ class ModelClassification(str, Enum):
 class ClassificationParams(BaseModel):
     estimator: str | Any
     fold: Optional[int | Any] = None
-    round: int = 4,
+    round: int = (4,)
     cross_validation: bool = True
     fit_kwargs: Optional[dict] = None
     groups: Optional[str | Any] = None
@@ -45,6 +47,7 @@ class ClassificationParams(BaseModel):
     engine: Optional[str] = None
     verbose: bool = True
     return_train_score: bool = False
+
 
 class ModelRegression(str, Enum):
     lr = "Linear Regression"
@@ -73,6 +76,7 @@ class ModelRegression(str, Enum):
     lightgbm = "Light Gradient Boosting Machine"
     catboost = "CatBoost Regressor"
 
+
 class ModelTimeSeries(str, Enum):
     naive = "Naive Forecaster"
     grand_means = "Grand Means Forecaster"
@@ -92,18 +96,27 @@ class ModelTimeSeries(str, Enum):
     en_cds_dt = "Elastic Net w/ Cond. Deseasonalize & Detrending"
     ridge_cds_dt = "Ridge w/ Cond. Deseasonalize & Detrending"
     lasso_cds_dt = "Lasso w/ Cond. Deseasonalize & Detrending"
-    llar_cds_dt = "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending"
-    br_cds_dt = "Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending"
+    llar_cds_dt = (
+        "Lasso Least Angular Regressor w/ Cond. Deseasonalize & Detrending"
+    )
+    br_cds_dt = (
+        "Bayesian Ridge w/ Cond. Deseasonalize & Deseasonalize & Detrending"
+    )
     huber_cds_dt = "Huber w/ Cond. Deseasonalize & Detrending"
-    omp_cds_dt = "Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending"
+    omp_cds_dt = (
+        "Orthogonal Matching Pursuit w/ Cond. Deseasonalize & Detrending"
+    )
     knn_cds_d = "K Neighbors w/ Cond. Deseasonalize & Detrending"
     dt_cds_dt = "Decision Tree w/ Cond. Deseasonalize & Detrending"
     rf_cds_dt = "Random Forest w/ Cond. Deseasonalize & Detrending"
     et_cds_dt = "Extra Trees w/ Cond. Deseasonalize & Detrending"
     gbr_cds_dt = "Gradient Boosting w/ Cond. Deseasonalize & Detrending"
     ada_cds_dt = "AdaBoost w/ Cond. Deseasonalize & Detrending"
-    lightgbm_cds_dt = "Light Gradient Boosting w/ Cond. Deseasonalize & Detrending"
+    lightgbm_cds_dt = (
+        "Light Gradient Boosting w/ Cond. Deseasonalize & Detrending"
+    )
     catboost_cds_dt = "CatBoost w/ Cond. Deseasonalize & Detrending"
+
 
 class ModelClustering(str, Enum):
     kmeans = "K-Means Clustering"
@@ -115,6 +128,7 @@ class ModelClustering(str, Enum):
     optics = "OPTICS Clustering"
     birch = "Birch Clustering"
     kmodes = "K-Modes Clustering"
+
 
 class ModelAnomalyDetection(str, Enum):
     abod = "Angle-base Outlier Detection"
@@ -130,9 +144,11 @@ class ModelAnomalyDetection(str, Enum):
     sod = "Subspace Outlier Detection"
     sos = "Stochastic Outlier Selection"
 
+
 @app.get("/")
 async def root():
     return {"pycaret_version": pycaret.__version__}
+
 
 @app.get("/model/{model_type}")
 async def get_type(model_type: ModelType):
@@ -147,14 +163,13 @@ async def get_type(model_type: ModelType):
     else:
         return {"error": "Model Type Unknown"}
 
+
 @app.get("/type/{model_name}")
 async def get_model(model_name: ModelType):
     return {"model_name": model_name}
+
 
 @app.post("/model/{model_type")
 async def create_model(model_type: ModelType):
     if model_type == ModelType.classification:
         return {"model_name": model_type.name}
-
-
-
