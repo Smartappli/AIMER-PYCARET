@@ -44,7 +44,7 @@ jobs:
       # Execute Bandit
       - name: Run Bandit CLI
         run: |
-          bandit -r . -v --format sarif -o results.sarif
+          python -m bandit -r . -v --format sarif -o results.sarif
 
       # Upload the SARIF file generated in the previous step
       - name: Upload SARIF results file
