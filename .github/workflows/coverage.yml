@@ -53,7 +53,7 @@ jobs:
       
       - name: Coverage Tests
         run: | 
-          coverage run pytest tests/ --verbose
+          coverage run pytest tests/
       
       - name: Coverage Report
         run: |          
