@@ -49,7 +49,7 @@ jobs:
           coverage erase
       - name: Coverage Tests
         run: | 
-          coverage run manage.py test tests.tests
+          coverage run pytest tests.tests
       - name: Coverage Report
         run: |          
           coverage xml -o coverage.xml
