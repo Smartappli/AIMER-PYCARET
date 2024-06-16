@@ -155,3 +155,6 @@ async def get_model(model_name: ModelType):
 async def create_model(model_type: ModelType):
     if model_type == ModelType.classification:
         return {"model_name": model_type.name}
+
+
+
