@@ -1,12 +1,13 @@
 import pytest
 from fastapi.testclient import TestClient
+
 from main import (
-    app,
-    ModelType,
-    ModelClassification,
-    ModelRegression,
-    ModelClustering,
     ModelAnomalyDetection,
+    ModelClassification,
+    ModelClustering,
+    ModelRegression,
+    ModelType,
+    app,
 )
 
 client = TestClient(app)
