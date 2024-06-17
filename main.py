@@ -39,7 +39,7 @@ class ModelClassification(str, Enum):
 class ClassificationParams(BaseModel):
     estimator: str | Any
     fold: Optional[int | Any] = None
-    round: int = (4,)
+    round: int = 4
     cross_validation: bool = True
     fit_kwargs: Optional[dict] = None
     groups: Optional[str | Any] = None
