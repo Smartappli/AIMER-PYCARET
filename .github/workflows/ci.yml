@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
   
 jobs:
-  pytest:
+  Pytest:
     name: pytest
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +32,7 @@ jobs:
         run: | 
           python -m pytest --cov-report xml:coverage.xml tests/ --verbose
           
-  ruff:
+  Ruff:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,4 +46,27 @@ jobs:
         with:
           src: "."
           args: "check --select C90,E,F,I,NPY,PD,PERF,RUF,SIM,UP,W --output-format github --diff --verbose"
+
+  Black:
+    name: Black
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check files using the black formatter
+        uses: rickstaa/action-black@v1
+        id: action_black
+        with:
+          black_args: ". --line-length 80 -t py310 -t py311"
+      - name: Create Pull Request
+        if: steps.action_black.outputs.is_formatted == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Format Python code with psf/black push"
+          commit-message: ":art: Format Python code with psf/black"
+          body: |
+            There appear to be some python formatting errors in ${{ github.sha }}. This pull request
+            uses the [psf/black](https://github.com/psf/black) formatter to fix these issues.
+          base: ${{ github.head_ref }} # Creates pull request onto pull request or commit branch
+          branch: black
       
