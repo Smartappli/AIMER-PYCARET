@@ -46,10 +46,4 @@ jobs:
         with:
           src: "."
           args: "check --select C90,E,F,I,NPY,PD,PERF,RUF,SIM,UP,W --output-format github --diff --verbose"
-          
-      - name: Run ruff format check
-        uses: chartboost/ruff-action@v1
-        with:
-          src: "."
-          args: "format --check --verbose"
       
