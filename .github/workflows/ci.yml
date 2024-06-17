@@ -26,7 +26,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest uv
+          python -m pip install uv
+          python -m uv pip install pytest
           python -m uv pip install -r requirements.txt
            
       - name: Coverage Tests
@@ -79,20 +80,16 @@ jobs:
       matrix:
         os: [macos-12, macos-13, ubuntu-20.04, ubuntu-22.04, ubuntu-24.04, windows-2019, windows-2022]
         python-version: ["3.10", "3.11", "3.12"]
-        exclude:      
-          - os: windows-2019
-            python-version: "3.10"
-          - os: windows-2022
-            python-version: "3.10"
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
+    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        allow-prereleases: true
         cache: 'pip'
+        
     - name: Install dependencies
       if: ${{ matrix.os == 'macos-12' || matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
       run: |
@@ -100,6 +97,7 @@ jobs:
         python -m pip install uv
         python -m uv pip install pylint
         python -m uv pip install -r requirements.txt
+        
     - name: Install dependencies on Windows
       if: ${{ matrix.os == 'windows-2019' || matrix.os == 'windows-2022' }}
       run: |
@@ -107,6 +105,7 @@ jobs:
         python -m pip install uv
         python -m uv pip install pylint
         python -m uv pip install -r requirements.txt
+        
     - name: Install dependencies on Ubuntu
       if: ${{ matrix.os == 'ubuntu-20.04' || matrix.os == 'ubuntu-22.04' || matrix.os == 'ubuntu-24.04' }}
       run: |
@@ -114,6 +113,7 @@ jobs:
         python -m pip install uv
         python -m uv pip install pylint
         python -m uv pip install -r requirements.txt
+        
     - name: Analysing the code with pylint
       run: pylint "**/*.py"
 
@@ -122,11 +122,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+       
       - name: Check files using the black formatter
         uses: rickstaa/action-black@v1
         id: action_black
         with:
-          black_args: ". --line-length 80 -t py310 -t py311"
+          black_args: ". --line-length 80 -t py310 -t py311 -t py312"
+          
       - name: Create Pull Request
         if: steps.action_black.outputs.is_formatted == 'true'
         uses: peter-evans/create-pull-request@v6
@@ -148,7 +150,6 @@ jobs:
     name: Bandit - Security Scan
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
         uses: actions/checkout@v4
 
