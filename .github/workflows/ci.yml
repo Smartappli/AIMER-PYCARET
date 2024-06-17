@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
   
 jobs:
-  ci:
-    name: CI
+  pytest:
+    name: pytest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,4 +31,25 @@ jobs:
       - name: Coverage Tests
         run: | 
           python -m pytest --cov-report xml:coverage.xml tests/ --verbose
+          
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          
+      - name: Run ruff check
+        uses: chartboost/ruff-action@v1
+        with:
+          src: "."
+          args: "check --verbose"
+          
+      - name: Run ruff format check
+        uses: chartboost/ruff-action@v1
+        with:
+          src: "."
+          args: "format --check --verbose"
       
