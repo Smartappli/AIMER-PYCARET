@@ -496,7 +496,8 @@ class TimeSeriesSetup(BaseModel):
 
 
 class TimeSeriesParams(BaseModel):
-    estimator: Union[str, Any], fold: Optional[Union[int, Any]] = None
+    estimator: Union[str, Any]
+    fold: Optional[Union[int, Any]] = None
     round: int = 4
     cross_validation: bool = True
     fit_kwargs: Optional[dict] = None
