@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import Any, Dict, Optional
+from anyio import to_thread
 
 import pycaret
 from fastapi import FastAPI
@@ -9,10 +10,11 @@ app = FastAPI()
 
 
 class ModelType(str, Enum):
+    anomaly_detection = "anomaly detection"
     classification = "classification"
-    regression = "regression"
     clustering = "clustering"
-    anomaly_detection = "anomaly_detection"
+    regression = "regression"
+    time_series = "time series"
 
 
 class ModelClassification(str, Enum):
@@ -146,6 +148,14 @@ class ModelAnomalyDetection(str, Enum):
     sos = "Stochastic Outlier Selection"
 
 
+def train_anomaly_detection_model(params: AnomalyDetectionParams):
+    return {"model_type": "anomaly_detection", "params": params.dict()}
+
+
+def train_classification_model(params: ClassificationParams):
+    return {"model_type": "classification", "params": params.dict()}
+    
+
 @app.get("/")
 async def root():
     return {"pycaret_version": pycaret.__version__}
@@ -174,3 +184,20 @@ async def get_model(model_name: ModelType):
 async def create_model(model_type: ModelType):
     if model_type == ModelType.classification:
         return {"model_name": model_type.name}
+        
+@app.post("/model/{model_type}")
+async def create_model(model_type: ModelType, params: ClassificationParams):
+    if model_type == ModelType.anomaly_detection:
+        result = await to_thread.run_sync(train_anomaly_detection_model, params)
+        return result
+    elif model_type == ModelType.classification:
+        result = await to_thread.run_sync(train_classification_model, params)
+        return result
+    elif model_type == ModelType.clustering:
+        result = await to_thread.run_sync(train_clustering_model, params)
+        return rsult
+    elif model_type == ModelType.regression:
+        result = await to_thread.run_sync(train_regression_model, params)
+        return result
+    else:
+        return {"error": "Model Type Not Supported for Training"}
