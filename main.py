@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Any, Callable, Dict, Optional, Union
 from anyio import to_thread
 
+import numpy
 import pycaret
 from fastapi import FastAPI
 from pydantic import BaseModel
