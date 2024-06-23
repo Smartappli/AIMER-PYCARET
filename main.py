@@ -9,6 +9,8 @@ import numpy
 import pycaret
 from fastapi import FastAPI
 from pydantic import BaseModel
+from logging import Logger
+
 
 app = FastAPI()
 
