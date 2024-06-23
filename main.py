@@ -279,7 +279,8 @@ class ClusteringSetup(BaseModel):
 
 
 class ClusteringParams(BaseModel):
-    model: Union[str, Any], num_clusters: int = 4
+    model: Union[str, Any]
+    num_clusters: int = 4
     ground_truth: Optional[str] = None
     round: int = 4
     fit_kwargs: Optional[dict] = None
