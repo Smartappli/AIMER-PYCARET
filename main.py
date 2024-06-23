@@ -10,6 +10,7 @@ import pycaret
 from fastapi import FastAPI
 from pydantic import BaseModel
 from logging import Logger
+from joblib import Memory
 
 
 app = FastAPI()
