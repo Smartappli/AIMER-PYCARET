@@ -4,12 +4,11 @@ from scipy.sparse import spmatrix
 from pandas import DataFrame, Series
 from typing import Optional, Union, Callable, Dict, List, Any
 from anyio import to_thread
-
+from pycaret.loggers.base_logger import BaseLogger
 import numpy
 import pycaret
 from fastapi import FastAPI
 from pydantic import BaseModel
-from logging import Logger
 
 
 app = FastAPI()
