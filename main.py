@@ -148,7 +148,52 @@ class ClassificationSetup(BaseModel):
     rare_value: str = 'rare'
     polynomial_features: bool = False
     polynomial_degree: int = 2
-    low_variance_threshold: Optional[float] = None, group_features: Optional[dict] = None, drop_groups: bool = False, remove_multicollinearity: bool = False, multicollinearity_threshold: float = 0.9, bin_numeric_features: Optional[List[str]] = None, remove_outliers: bool = False, outliers_method: str = 'iforest', outliers_threshold: float = 0.05, fix_imbalance: bool = False, fix_imbalance_method: Union[str, Any] = 'SMOTE', transformation: bool = False, transformation_method: str = 'yeo-johnson', normalize: bool = False, normalize_method: str = 'zscore', pca: bool = False, pca_method: str = 'linear', pca_components: Optional[Union[int, float, str]] = None, feature_selection: bool = False, feature_selection_method: str = 'classic', feature_selection_estimator: Union[str, Any] = 'lightgbm', n_features_to_select: Union[int, float] = 0.2, custom_pipeline: Optional[Any] = None, custom_pipeline_position: int = -1, data_split_shuffle: bool = True, data_split_stratify: Union[bool, List[str]] = True, fold_strategy: Union[str, Any] = 'stratifiedkfold', fold: int = 10, fold_shuffle: bool = False, fold_groups: Optional[Union[str, DataFrame]] = None, n_jobs: Optional[int] = -1, use_gpu: bool = False, html: bool = True, session_id: Optional[int] = None, system_log: Union[bool, str, Logger] = True, log_experiment: Union[bool, str, BaseLogger, List[Union[str, BaseLogger]]] = False, experiment_name: Optional[str] = None, experiment_custom_tags: Optional[Dict[str, Any]] = None, log_plots: Union[bool, list] = False, log_profile: bool = False, log_data: bool = False, engine: Optional[Dict[str, str]] = None, verbose: bool = True, memory: Union[bool, str, Memory] = True, profile: bool = False, profile_kwargs: Optional[Dict[str, Any]] = None
+    low_variance_threshold: Optional[float] = None
+    group_features: Optional[dict] = None
+    drop_groups: bool = False
+    remove_multicollinearity: bool = False
+    multicollinearity_threshold: float = 0.9
+    bin_numeric_features: Optional[List[str]] = None
+    remove_outliers: bool = False
+    outliers_method: str = 'iforest'
+    outliers_threshold: float = 0.05
+    fix_imbalance: bool = False
+    fix_imbalance_method: Union[str, Any] = 'SMOTE'
+    transformation: bool = False
+    transformation_method: str = 'yeo-johnson'
+    normalize: bool = False
+    normalize_method: str = 'zscore'
+    pca: bool = False
+    pca_method: str = 'linear'
+    pca_components: Optional[Union[int, float, str]] = None
+    feature_selection: bool = False
+    feature_selection_method: str = 'classic'
+    feature_selection_estimator: Union[str, Any] = 'lightgbm'
+    n_features_to_select: Union[int, float] = 0.2
+    custom_pipeline: Optional[Any] = None
+    custom_pipeline_position: int = -1
+    data_split_shuffle: bool = True
+    data_split_stratify: Union[bool, List[str]] = True
+    fold_strategy: Union[str, Any] = 'stratifiedkfold'
+    fold: int = 10
+    fold_shuffle: bool = False
+    fold_groups: Optional[Union[str, DataFrame]] = None
+    n_jobs: Optional[int] = -1
+    use_gpu: bool = False
+    html: bool = True
+    session_id: Optional[int] = None
+    system_log: Union[bool, str, Logger] = True
+    log_experiment: Union[bool, str, BaseLogger, List[Union[str, BaseLogger]]] = False
+    experiment_name: Optional[str] = None
+    experiment_custom_tags: Optional[Dict[str, Any]] = None
+    log_plots: Union[bool, list] = False
+    log_profile: bool = False
+    log_data: bool = False
+    engine: Optional[Dict[str, str]] = None
+    verbose: bool = True
+    memory: Union[bool, str, Memory] = True
+    profile: bool = False
+    profile_kwargs: Optional[Dict[str, Any]] = None
 
     
 class ClassificationParams(BaseModel):
