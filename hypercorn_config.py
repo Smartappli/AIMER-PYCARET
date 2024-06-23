@@ -5,7 +5,7 @@ from hypercorn.config import Config
 from hypercorn.asyncio import serve
 from main import (
     app,
-)  # Assurez-vous que le chemin est correct selon votre structure de projet
+)
 
 load_dotenv()
 
