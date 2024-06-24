@@ -2,6 +2,7 @@ from enum import Enum
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional
 
+import pandas as pd
 import pycaret.anomaly as anomaly
 import pycaret.classification as classification
 import pycaret.clustering as clustering
@@ -476,16 +477,19 @@ async def anomaly_detection_endpoint(
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
+        # Create an instance of the anomaly detection class
+        anomaly_instance = anomaly.AnomalyExperiment()
+        
         # Process data_func if it exists
         if "data_func" in setup_config and callable(setup_config["data_func"]):
             setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
 
         # Perform anomaly detection setup
-        setup_result = await to_thread.run_sync(anomaly.setup, **setup_config)
+        setup_result = await to_thread.run_sync(anomaly_instance.setup, **setup_config)
         logger.info(f"Setup result: {setup_result}")
 
         # Perform anomaly detection model training
-        train_result = await to_thread.run_sync(anomaly.create_model, **train_config)
+        train_result = await to_thread.run_sync(anomaly_instance.create_model, **train_config)
         logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
