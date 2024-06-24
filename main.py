@@ -1,17 +1,16 @@
 from enum import Enum
-from numpy import ndarray
-from scipy.sparse import spmatrix
-from pandas import DataFrame, Series
-from typing import Optional, Union, Callable, Dict, List, Any
-from anyio import to_thread
-from pycaret.loggers.base_logger import BaseLogger
-import numpy
-import pycaret
-from fastapi import FastAPI
-from pydantic import BaseModel
 from logging import Logger
-from joblib import Memory
+from typing import Optional, Union, Callable, Dict, List, Any
 
+import pycaret
+from anyio import to_thread
+from fastapi import FastAPI
+from joblib import Memory
+from numpy import ndarray
+from pandas import DataFrame, Series
+from pycaret.loggers.base_logger import BaseLogger
+from pydantic import BaseModel
+from scipy.sparse import spmatrix
 
 app = FastAPI()
 
