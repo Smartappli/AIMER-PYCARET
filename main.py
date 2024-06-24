@@ -8,7 +8,7 @@ import pycaret.clustering as clustering
 import pycaret.regression as regression
 import pycaret.time_series as time_series
 from anyio import to_thread
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, APIRouter
 from joblib import Memory
 from numpy import ndarray
 from pandas import DataFrame, Series
@@ -17,7 +17,10 @@ from pydantic import BaseModel
 from scipy.sparse import spmatrix
 from loguru import logger
 
-app = FastAPI()
+
+# Initialize the logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class ModelType(str, Enum):
@@ -444,6 +447,9 @@ class TimeSeriesParams(BaseModel):
     verbose: bool = True
 
 
+# Initialize the API router
+router = APIRouter()
+
 @app.get("/")
 async def root():
     return {"pycaret_version": pycaret.__version__}
@@ -459,63 +465,71 @@ async def get_type(model_type: ModelType):
         return {"error": "Model Type Unknown"}
 
 
-@app.post("/anomaly_detection")
+@router.post("/anomaly_detection")
 async def anomaly_detection_endpoint(
     setup_params: AnomalyDetectionSetup, train_params: AnomalyDetectionParams
 ):
     try:
         logger.info("Starting anomaly detection setup and training.")
+
+        # Convert setup_params and train_params to dictionaries
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
-        if callable(setup_config.get("data_func")):
-            setup_config["data"] = setup_config.pop("data_func")()
+        # Process data_func if it exists
+        if "data_func" in setup_config and callable(setup_config["data_func"]):
+            setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
 
-        setup_config.pop("data_func", None)
+        # Perform anomaly detection setup
+        setup_result = await to_thread.run_sync(anomaly.setup, **setup_config)
+        logger.info(f"Setup result: {setup_result}")
 
-        setup_future = to_thread.run_sync(anomaly.setup, **setup_config)
-        setup_result = await setup_future
-
-        train_future = to_thread.run_sync(anomaly.create_model, **train_config)
-        train_result = await train_future
+        # Perform anomaly detection model training
+        train_result = await to_thread.run_sync(anomaly.create_model, **train_config)
+        logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
         logger.info("Anomaly detection setup and training completed successfully.")
         return result
+        
     except Exception as e:
         logger.error(f"An error occurred during anomaly detection: {str(e)}")
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/classification")
+@router.post("/classification")
 async def classification_endpoint(
     setup_params: ClassificationSetup, train_params: ClassificationParams
 ):
     try:
         logger.info("Starting classification setup and training.")
+
+        # Convert setup_params and train_params to dictionaries
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
-        if callable(setup_config.get("data_func")):
-            setup_config["data"] = setup_config.pop("data_func")()
+        # Process data_func if it exists
+        if "data_func" in setup_config and callable(setup_config["data_func"]):
+            setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
 
-        setup_config.pop("data_func", None)
+        # Perform anomaly detection setup
+        setup_result = await to_thread.run_sync(classification.setup, **setup_config)
+        logger.info(f"Setup result: {setup_result}")
 
-        setup_future = to_thread.run_sync(classification.setup, **setup_config)
-        setup_result = await setup_future
-
-        train_future = to_thread.run_sync(classification.create_model, **train_config)
-        train_result = await train_future
+        # Perform anomaly detection model training
+        train_result = await to_thread.run_sync(classification.create_model, **train_config)
+        logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
         logger.info("Classification setup and training completed successfully.")
         return result
+        
     except Exception as e:
         logger.error(f"An error occurred during classification: {str(e)}")
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/clustering")
+@router.post("/clustering")
 async def clustering_endpoint(
     setup_params: ClusteringSetup, train_params: ClusteringParams
 ):
@@ -538,12 +552,13 @@ async def clustering_endpoint(
         result = {"setup": setup_result, "train": train_result}
         logger.info("Clustering setup and training completed successfully.")
         return result
+        
     except Exception as e:
         logger.error(f"An error occurred during clustering: {str(e)}")
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/regression")
+@router.post("/regression")
 async def regression_endpoint(
     setup_params: RegressionSetup, train_params: RegressionParams
 ):
@@ -566,12 +581,13 @@ async def regression_endpoint(
         result = {"setup": setup_result, "train": train_result}
         logger.info("Regression setup and training completed successfully.")
         return result
+        
     except Exception as e:
         logger.error(f"An error occurred during regression: {str(e)}")
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/time_series")
+@router.post("/time_series")
 async def classification_endpoint(
     setup_params: TimeSeriesSetup, train_params: TimeSeriesParams
 ):
@@ -594,6 +610,11 @@ async def classification_endpoint(
         result = {"setup": setup_result, "train": train_result}
             logger.info("Time series setup and training completed successfully.")
         return result
+        
     except Exception as e:
         logger.error(f"An error occurred during time series: {str(e)}")
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Create the FastAPI app and include the router
+app = FastAPI()
+app.include_router(router)
