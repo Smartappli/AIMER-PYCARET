@@ -11,15 +11,17 @@ def test_load_config_default():
     config = load_config()
     assert config.bind == ["0.0.0.0:8000"]
 
+
 @patch.dict(os.environ, {"BIND": "127.0.0.1:5000,0.0.0.0:5001"})
 def test_load_config_custom():
     # Test with custom environment variable
     config = load_config()
     assert config.bind == ["127.0.0.1:5000", "0.0.0.0:5001"]
 
+
 @pytest.mark.anyio
-@patch('main.serve', new_callable=MagicMock)
-@patch('main.load_config', return_value=Config())
+@patch("main.serve", new_callable=MagicMock)
+@patch("main.load_config", return_value=Config())
 async def test_main(mock_load_config, mock_serve):
     # Test the main function
     async def dummy_serve(app, config):
@@ -32,4 +34,3 @@ async def test_main(mock_load_config, mock_serve):
 
     mock_load_config.assert_called_once()
     mock_serve.assert_called_once()
-
