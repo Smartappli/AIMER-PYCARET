@@ -17,7 +17,7 @@ app = FastAPI()
 
 class ModelType(str, Enum):
     """Enumeration for different types of models."""
-    
+
     anomaly_detection = "anomaly detection"
     classification = "classification"
     clustering = "clustering"
@@ -29,14 +29,14 @@ def get_pycaret_models() -> Dict[ModelType, list]:
     """
     Retrieve available estimators for different model types in PyCaret.
 
-    This function queries the available estimators for various model types 
-    such as anomaly detection, classification, clustering, regression, 
+    This function queries the available estimators for various model types
+    such as anomaly detection, classification, clustering, regression,
     and time series from the PyCaret library.
 
     Returns:
-        Dict[ModelType, list]: A dictionary where the keys are model types 
-        (anomaly detection, classification, clustering, regression, 
-        and time series) and the values are lists of available estimators 
+        Dict[ModelType, list]: A dictionary where the keys are model types
+        (anomaly detection, classification, clustering, regression,
+        and time series) and the values are lists of available estimators
         for each model type.
     """
     models = {
