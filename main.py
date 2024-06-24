@@ -38,6 +38,23 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+class User(BaseModel):
+    username: str
+
+
+class UserInDB(User):
+    hashed_password: str
+    
+
 class ModelType(str, Enum):
     """Enumeration for different types of models."""
 
@@ -483,7 +500,9 @@ async def get_type(model_type: ModelType):
 
 @router.post("/anomaly_detection")
 async def anomaly_detection_endpoint(
-    setup_params: AnomalyDetectionSetup, train_params: AnomalyDetectionParams
+    setup_params: AnomalyDetectionSetup,
+    train_params: AnomalyDetectionParams,
+    current_user: TokenData = Depends(get_current_user)
 ):
     try:
         logger.info("Starting anomaly detection setup and training.")
