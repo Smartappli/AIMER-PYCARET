@@ -344,7 +344,7 @@ class RegressionSetup(BaseModel):
     html: bool = True
     session_id: Optional[int] = None
     system_log: bool | str | Logger = True
-    log_experiment:  bool | str | BaseLogger | List[str | BaseLogger] = False
+    log_experiment: bool | str | BaseLogger | List[str | BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
     log_plots: bool | list = False
@@ -476,7 +476,7 @@ async def setup_classification(setup_params: ClassificationSetup):
         )
         return result
     except Exception as e:
-        return {"Error": str(e)}        
+        return {"Error": str(e)}
 
 
 @app.post("/train/classification/")
@@ -488,7 +488,7 @@ async def train_classification(params: ClassificationParams):
         )
         return result
     except Exception as e:
-        return {"Error": str(e)}   
+        return {"Error": str(e)}
 
 
 @app.post("/setup/clustering/")
@@ -512,7 +512,7 @@ async def train_clustering(params: ClusteringParams):
         )
         return result
     except Exception as e:
-        return {"Error": str(e)} 
+        return {"Error": str(e)}
 
 
 @app.post("/setup/regression/")
@@ -560,4 +560,4 @@ async def train_time_series(params: TimeSeriesParams):
         )
         return result
     except Exception as e:
-        return {"Error": str(e)} 
+        return {"Error": str(e)}
