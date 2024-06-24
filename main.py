@@ -89,9 +89,7 @@ class AnomalyDetectionSetup(BaseModel):
     html: bool = True
     session_id: Optional[int] = None
     system_log: bool | str | Logger = True
-    log_experiment: Union[
-        bool, str, BaseLogger, List[str |  BaseLogger]
-    ] = False
+    log_experiment: bool | str | BaseLogger | List[str |  BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
     log_plots: bool | list = False
@@ -283,30 +281,28 @@ class ClusteringSetup(BaseModel):
     normalize_method: str = "zscore"
     pca: bool = False
     pca_method: str = "linear"
-    pca_components: Optional[Union[int, float, str]] = None
+    pca_components: Optional[int | float  str]] = None
     custom_pipeline: Optional[Any] = None
     custom_pipeline_position: int = -1
     n_jobs: Optional[int] = -1
     use_gpu: bool = False
     html: bool = True
     session_id: Optional[int] = None
-    system_log: Union[bool, str, Logger] = True
-    log_experiment: Union[
-        bool, str, BaseLogger, List[Union[str, BaseLogger]]
-    ] = False
+    system_log: bool | str | Logger = True
+    log_experiment: bool | str | BaseLogger | List[str | BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
-    log_plots: Union[bool, list] = False
+    log_plots: bool | list = False
     log_profile: bool = False
     log_data: bool = False
     verbose: bool = True
-    memory: Union[bool, str, Memory] = True
+    memory: bool | str | Memory = True
     profile: bool = False
     profile_kwargs: Optional[Dict[str, Any]] = None
 
 
 class ClusteringParams(BaseModel):
-    model: Union[str, Any]
+    model: str | Any
     num_clusters: int = 4
     ground_truth: Optional[str] = None
     round: int = 4
@@ -345,18 +341,14 @@ class ModelRegression(str, Enum):
 
 
 class RegressionSetup(BaseModel):
-    data: Optional[
-        Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
-    ] = None
+    data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
     data_func: Optional[
-        Callable[[], Union[dict, list, tuple, ndarray, spmatrix, DataFrame]]
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
     ] = None
-    target: Union[int, str, list, tuple, ndarray, Series] = -1
-    index: Union[bool, int, str, list, tuple, ndarray, Series] = True
+    target: int | str | list | tuple | ndarray | Series = -1
+    index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
-    test_data: Optional[
-        Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
-    ] = None
+    test_data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
     categorical_features: Optional[List[str]] = None
@@ -370,8 +362,8 @@ class RegressionSetup(BaseModel):
     numeric_imputation: str = "mean"
     categorical_imputation: str = "mode"
     iterative_imputation_iters: int = 5
-    numeric_iterative_imputer: Union[str, Any] = "lightgbm"
-    categorical_iterative_imputer: Union[str, Any] = "lightgbm"
+    numeric_iterative_imputer: str | Any = "lightgbm"
+    categorical_iterative_imputer: str | Any = "lightgbm"
     text_features_method: str = "tf-idf"
     max_encoding_ohe: int = 25
     encoding_method: Optional[Any] = None
@@ -394,7 +386,7 @@ class RegressionSetup(BaseModel):
     normalize_method: str = "zscore"
     pca: bool = False
     pca_method: str = "linear"
-    pca_components: Optional[Union[int, float, str]] = None
+    pca_components: Optional[int | float | str] = None
     feature_selection: bool = False
     feature_selection_method: str = "classic"
     feature_selection_estimator: Union[str, Any] = "lightgbm"
@@ -484,20 +476,20 @@ class ModelTimeSeries(str, Enum):
 
 
 class TimeSeriesSetup(BaseModel):
-    data: Optional[Union[Series, DataFrame]] = None
-    data_func: Optional[Callable[[], Union[Series, DataFrame]]] = None
+    data: Optional[Series | DataFrame] = None
+    data_func: Optional[Callable[[], Series | DataFrame]] = None
     target: Optional[str] = None
     index: Optional[str] = None
     ignore_features: Optional[List] = None
-    numeric_imputation_target: Optional[Union[str, int, float]] = None
-    numeric_imputation_exogenous: Optional[Union[str, int, float]] = None
+    numeric_imputation_target: Optional[str | int | float] = None
+    numeric_imputation_exogenous: Optional[str | int | float] = None
     transform_target: Optional[str] = None
     transform_exogenous: Optional[str] = None
     scale_target: Optional[str] = None
     scale_exogenous: Optional[str] = None
     fe_target_rr: Optional[list] = None
     fe_exogenous: Optional[list] = None
-    fold_strategy: Union[str, Any] = "expanding"
+    fold_strategy: str | Any = "expanding"
     fold: int = 3
     fh: Optional[Union[List[int], int, ndarray, ForecastingHorizon]] = 1
     hyperparameter_split: str = "all"
@@ -510,20 +502,18 @@ class TimeSeriesSetup(BaseModel):
     num_sps_to_use: int = 1
     seasonality_type: str = "mul"
     point_alpha: Optional[float] = None
-    coverage: Union[float, List[float]] = 0.9
+    coverage: float | List[float] = 0.9
     enforce_exogenous: bool = True
     n_jobs: Optional[int] = -1
     use_gpu: bool = False
     custom_pipeline: Optional[Any] = None
     html: bool = True
     session_id: Optional[int] = None
-    system_log: Union[bool, str, Logger] = True
-    log_experiment: Union[
-        bool, str, BaseLogger, List[Union[str, BaseLogger]]
-    ] = False
+    system_log: bool | str | Logger = True
+    log_experiment: bool | str | BaseLogger | List[str | BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
-    log_plots: Union[bool, list] = False
+    log_plots: bool | list = False
     log_profile: bool = False
     log_data: bool = False
     engine: Optional[Dict[str, str]] = None
@@ -534,8 +524,8 @@ class TimeSeriesSetup(BaseModel):
 
 
 class TimeSeriesParams(BaseModel):
-    estimator: Union[str, Any]
-    fold: Optional[Union[int, Any]] = None
+    estimator: str | Any
+    fold: Optional[int | Any] = None
     round: int = 4
     cross_validation: bool = True
     fit_kwargs: Optional[dict] = None
