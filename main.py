@@ -40,9 +40,7 @@ class ModelAnomalyDetection(str, Enum):
 
 
 class AnomalyDetectionSetup(BaseModel):
-    data: Optional[
-        dict | list |tuple | ndarray | spmatrix | DataFrame
-    ] = None
+    data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
     data_func: Optional[
         Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
     ] = None
@@ -96,7 +94,7 @@ class AnomalyDetectionSetup(BaseModel):
     log_profile: bool = False
     log_data: bool = False
     verbose: bool = True
-    memory: bool | str |Memory = True
+    memory: bool | str | Memory = True
     profile: bool = False
     profile_kwargs: Optional[Dict[str, Any]] = None
 
@@ -131,11 +129,9 @@ class ModelClassification(str, Enum):
 
 
 class ClassificationSetup(BaseModel):
-    data: Optional[
-        dict | list | tuple | ndarray | spmatrix | DataFrame
-    ] = None
+    data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
     data_func: Optional[
-        Callable[[], dict |list | tuple | ndarray | spmatrix | DataFrame]
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
     ] = None
     target: int | str | list | tuple | ndarray | Series = -1
     index: bool | int | str | list | tuple | ndarray | Series = True
