@@ -2,7 +2,11 @@ from enum import Enum
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional
 
-import pycaret
+import pycaret.anomaly as anomaly
+import pycaret.classification as classification
+import pycaret.clustering as clustering
+import pycaret.regression as regression
+import pycaret.time_series as time_series
 from anyio import to_thread
 from fastapi import FastAPI
 from joblib import Memory
@@ -11,6 +15,7 @@ from pandas import DataFrame, Series
 from pycaret.loggers.base_logger import BaseLogger
 from pydantic import BaseModel
 from scipy.sparse import spmatrix
+from loguru import logger
 
 app = FastAPI()
 
@@ -40,13 +45,11 @@ def get_pycaret_models() -> Dict[ModelType, list]:
         for each model type.
     """
     models = {
-        ModelType.anomaly_detection: available_estimators(
-            type="anomaly_detection"
-        ),
-        ModelType.classification: available_estimators(type="classification"),
-        ModelType.clustering: available_estimators(type="clustering"),
-        ModelType.regression: available_estimators(type="regression"),
-        ModelType.time_series: available_estimators(type="time_series"),
+        ModelType.anomaly_detection: anomaly.models(),
+        ModelType.classification: classification.models(),
+        ModelType.clustering: pycaret.clustering.models(),
+        ModelType.regression: pycaret.regression.models(),
+        ModelType.time_series: pycaret.time_series.models(),
     }
     return models
 
@@ -456,121 +459,141 @@ async def get_type(model_type: ModelType):
         return {"error": "Model Type Unknown"}
 
 
-@app.post("/setup/anomaly_detection/")
-async def setup_anomaly_detection(setup_params: AnomalyDetectionSetup):
-    """Setup anomaly detection models with the provided parameters."""
+@app.post("/anomaly_detection")
+async def anomaly_detection_endpoint(
+    setup_params: AnomalyDetectionSetup, train_params: AnomalyDetectionParams
+):
     try:
-        result = await to_thread.run_sync(
-            pycaret.anomaly.setup, **setup_params.dict()
-        )
+        logger.info("Starting anomaly detection setup and training.")
+        setup_config = setup_params.dict()
+        train_config = train_params.dict()
+
+        if callable(setup_config.get("data_func")):
+            setup_config["data"] = setup_config.pop("data_func")()
+
+        setup_config.pop("data_func", None)
+
+        setup_future = to_thread.run_sync(anomaly.setup, **setup_config)
+        setup_result = await setup_future
+
+        train_future = to_thread.run_sync(anomaly.create_model, **train_config)
+        train_result = await train_future
+
+        result = {"setup": setup_result, "train": train_result}
+        logger.info("Anomaly detection setup and training completed successfully.")
         return result
     except Exception as e:
-        return {"Error": str(e)}
+        logger.error(f"An error occurred during anomaly detection: {str(e)}")
+        return {"error": str(e)}
 
 
-@app.post("/train/anomaly_detection/")
-async def train_anomaly_detection(params: AnomalyDetectionParams):
-    """Train anomaly detection models with the provided parameters."""
+@app.post("/classification")
+async def classification_endpoint(
+    setup_params: ClassificationSetup, train_params: ClassificationParams
+):
     try:
-        result = await to_thread.run_sync(
-            pycaret.anomaly.create_model, **params.dict()
-        )
+        logger.info("Starting classification setup and training.")
+        setup_config = setup_params.dict()
+        train_config = train_params.dict()
+
+        if callable(setup_config.get("data_func")):
+            setup_config["data"] = setup_config.pop("data_func")()
+
+        setup_config.pop("data_func", None)
+
+        setup_future = to_thread.run_sync(classification.setup, **setup_config)
+        setup_result = await setup_future
+
+        train_future = to_thread.run_sync(classification.create_model, **train_config)
+        train_result = await train_future
+
+        result = {"setup": setup_result, "train": train_result}
+        logger.info("Classification setup and training completed successfully.")
         return result
     except Exception as e:
-        return {"Error": str(e)}
+        logger.error(f"An error occurred during classification: {str(e)}")
+        return {"error": str(e)}
 
 
-@app.post("/setup/classification/")
-async def setup_classification(setup_params: ClassificationSetup):
-    """Setup classification models with the provided parameters."""
+@app.post("/clustering")
+async def clustering_endpoint(
+    setup_params: ClusteringSetup, train_params: ClusteringParams
+):
     try:
-        result = await to_thread.run_sync(
-            pycaret.classification.setup, **setup_params.dict()
-        )
+        logger.info("Starting clustering setup and training.")
+        setup_config = setup_params.dict()
+        train_config = train_params.dict()
+
+        if callable(setup_config.get("data_func")):
+            setup_config["data"] = setup_config.pop("data_func")()
+
+        setup_config.pop("data_func", None)
+
+        setup_future = to_thread.run_sync(clustering.setup, **setup_config)
+        setup_result = await setup_future
+
+        train_future = to_thread.run_sync(clustering.create_model, **train_config)
+        train_result = await train_future
+
+        result = {"setup": setup_result, "train": train_result}
+        logger.info("Clustering setup and training completed successfully.")
         return result
     except Exception as e:
-        return {"Error": str(e)}
+        logger.error(f"An error occurred during clustering: {str(e)}")
+        return {"error": str(e)}
 
 
-@app.post("/train/classification/")
-async def train_classification(params: ClassificationParams):
-    """Train classification models with the provided parameters."""
+@app.post("/regression")
+async def regression_endpoint(
+    setup_params: RegressionSetup, train_params: RegressionParams
+):
     try:
-        result = await to_thread.run_sync(
-            pycaret.classification.create_model, **params.dict()
-        )
+        logger.info("Starting regression setup and training.")
+        setup_config = setup_params.dict()
+        train_config = train_params.dict()
+
+        if callable(setup_config.get("data_func")):
+            setup_config["data"] = setup_config.pop("data_func")()
+
+        setup_config.pop("data_func", None)
+
+        setup_future = to_thread.run_sync(regression.setup, **setup_config)
+        setup_result = await setup_future
+
+        train_future = to_thread.run_sync(regression.create_model, **train_config)
+        train_result = await train_future
+
+        result = {"setup": setup_result, "train": train_result}
+        logger.info("Regression setup and training completed successfully.")
         return result
     except Exception as e:
-        return {"Error": str(e)}
+        logger.error(f"An error occurred during regression: {str(e)}")
+        return {"error": str(e)}
 
 
-@app.post("/setup/clustering/")
-async def setup_clustering(setup_params: ClusteringSetup):
-    """Setup clustering models with the provided parameters."""
+@app.post("/time_series")
+async def classification_endpoint(
+    setup_params: TimeSeriesSetup, train_params: TimeSeriesParams
+):
     try:
-        result = await to_thread.run_sync(
-            pycaret.clustering.setup, **setup_params.dict()
-        )
+        logger.info("Starting time series setup and training.")
+        setup_config = setup_params.dict()
+        train_config = train_params.dict()
+
+        if callable(setup_config.get("data_func")):
+            setup_config["data"] = setup_config.pop("data_func")()
+
+        setup_config.pop("data_func", None)
+
+        setup_future = to_thread.run_sync(time_series.setup, **setup_config)
+        setup_result = await setup_future
+
+        train_future = to_thread.run_sync(tiume_series.create_model, **train_config)
+        train_result = await train_future
+
+        result = {"setup": setup_result, "train": train_result}
+            logger.info("Time series setup and training completed successfully.")
         return result
     except Exception as e:
-        return {"Error": str(e)}
-
-
-@app.post("/train/clustering/")
-async def train_clustering(params: ClusteringParams):
-    """Train clustering models with the provided parameters."""
-    try:
-        result = await to_thread.run_sync(
-            pycaret.clustering.create_model, **params.dict()
-        )
-        return result
-    except Exception as e:
-        return {"Error": str(e)}
-
-
-@app.post("/setup/regression/")
-async def setup_regression(setup_params: RegressionSetup):
-    """Setup regression models with the provided parameters."""
-    try:
-        result = await to_thread.run_sync(
-            pycaret.regression.setup, **setup_params.dict()
-        )
-        return result
-    except Exception as e:
-        return {"Error": str(e)}
-
-
-@app.post("/train/regression/")
-async def train_regression(params: RegressiongParams):
-    """Train regression models with the provided parameters."""
-    try:
-        result = await to_thread.run_sync(
-            pycaret.regression.create_model, **params.dict()
-        )
-        return result
-    except Exception as e:
-        return {"Error": str(e)}
-
-
-@app.post("/setup/time_series/")
-async def setup_time_series(setup_params: TimeSeriesgSetup):
-    """Setup time series models with the provided parameters."""
-    try:
-        result = await to_thread.run_sync(
-            pycaret.time_series.setup, **setup_params.dict()
-        )
-        return result
-    except Exception as e:
-        return {"Error": str(e)}
-
-
-@app.post("/train/time_series/")
-async def train_time_series(params: TimeSeriesParams):
-    """Train time series models with the provided parameters."""
-    try:
-        result = await to_thread.run_sync(
-            pycaret.time_series.create_model, **params.dict()
-        )
-        return result
-    except Exception as e:
-        return {"Error": str(e)}
+        logger.error(f"An error occurred during time series: {str(e)}")
+        return {"error": str(e)}
