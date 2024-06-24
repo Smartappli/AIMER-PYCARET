@@ -598,3 +598,28 @@ async def create_model(model_type: ModelType, params: ClassificationParams):
         return result
     else:
         return {"error": "Model Type Not Supported for Training"}
+
+
+@app.post("/anomaly-detection")
+async def anomaly_detection(params: AnomalyDetectionParams):
+    return train_anomaly_detection_model(params)
+
+
+@app.post("/classification")
+async def classification(params: ClassificationParams):
+    return train_classification_model(params)
+
+
+@app.post("/clustering")
+async def clustering(params: ClusteringParams):
+    return train_clustering_model(params)
+
+
+@app.post("/regression")
+async def regression(params: RegressionParams):
+    return train_regression_model(params)
+
+
+@app.post("/time-series")
+async def time_series(params: TimeSeriesParams):
+    return train_time_series_model(params)
