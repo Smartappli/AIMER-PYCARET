@@ -36,24 +36,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 # Initialize the logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: Optional[str] = None
-
-
-class User(BaseModel):
-    username: str
-
-
-class UserInDB(User):
-    hashed_password: str
-    
+  
 
 class ModelType(str, Enum):
     """Enumeration for different types of models."""
@@ -479,9 +462,47 @@ class TimeSeriesParams(BaseModel):
     verbose: bool = True
 
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: Optional[str] = None
+
+
+class User(BaseModel):
+    username: str
+
+
+class UserInDB(User):
+    hashed_password: str
+
+
 # Initialize the API router
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+fake_users_db = {
+    "johndoe": {
+        "username": "johndoe",
+        "hashed_password": "fakehashedpassword"
+    }
+}
+
+
+def verify_password(plain_password, hashed_password):
+    # Verify password is not empty
+    if not plain_password:
+        return False
+    return plain_password == hashed_password
+
+
+def get_user(db, username: str):
+    if username in db:
+        user_dict = db[username]
+        return UserInDB(**user_dict)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -509,7 +530,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
-    return token_data
+    user = get_user(fake_users_db, username=token_data.username)
+    if user is None:
+        raise credentials_exception
+    return user
 
     
 @router.get("/")
@@ -519,9 +543,8 @@ async def root():
 
 @router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    # Authentifiez l'utilisateur ici (exemple simplifié)
-    user_dict = {"username": form_data.username, "password": form_data.password}
-    if not (user_dict["username"] == "test" and user_dict["password"] == "password"):
+    user = get_user(fake_users_db, form_data.username)
+    if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -529,12 +552,17 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user_dict["username"]}, expires_delta=access_token_expires
+        data={"sub": user.username}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/model/{model_type}")
+@router.get("/secure-endpoint")
+async def read_secure_data(current_user: User = Depends(get_current_user)):
+    return {"message": f"Hello, {current_user.username}"}
+
+
+@router.get("/model/{model_type}")
 async def get_type(model_type: ModelType):
     pycaret_models = get_pycaret_models()
 
@@ -568,9 +596,20 @@ async def anomaly_detection_endpoint(
         setup_result = await to_thread.run_sync(anomaly_instance.setup, **setup_config)
         logger.info(f"Setup result: {setup_result}")
 
+        # Check if specific models are specified in train_params
+        models_to_train = train_config.get("models", None)
+
         # Perform anomaly detection model training
-        train_result = await to_thread.run_sync(anomaly_instance.create_model, **train_config)
-        logger.info(f"Training result: {train_result}")
+        if not models_to_train:
+            # If no models are specified, use compare_models to evaluate all models
+            logger.info("No specific models specified, comparing all available models.")
+            train_result = await to_thread.run_sync(anomaly_instance.compare_models)
+            logger.info(f"Training result: {train_result}")
+        else:
+            # Train the specified model(s)
+            logger.info(f"Training specified models: {models_to_train}")
+            train_result = await to_thread.run_sync(anomaly_instance.create_model, **train_config)
+            logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
         logger.info("Anomaly detection setup and training completed successfully.")
@@ -594,16 +633,19 @@ async def classification_endpoint(
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
+        # Create an instance of the classification class
+        classification_instance = classification.ClassificationExperiment()
+        
         # Process data_func if it exists
         if "data_func" in setup_config and callable(setup_config["data_func"]):
             setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
 
-        # Perform anomaly detection setup
-        setup_result = await to_thread.run_sync(classification.setup, **setup_config)
+        # Perform classification setup
+        setup_result = await to_thread.run_sync(classification_instance.setup, **setup_config)
         logger.info(f"Setup result: {setup_result}")
 
-        # Perform anomaly detection model training
-        train_result = await to_thread.run_sync(classification.create_model, **train_config)
+        # Perform classification model training
+        train_result = await to_thread.run_sync(classification_instance.create_model, **train_config)
         logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
@@ -623,19 +665,25 @@ async def clustering_endpoint(
 ):
     try:
         logger.info("Starting clustering setup and training.")
+
+        # Convert setup_params and train_params to dictionaries
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
-        if callable(setup_config.get("data_func")):
-            setup_config["data"] = setup_config.pop("data_func")()
+        # Create an instance of the clustering class
+        clustering_instance = clustering.ClusteringExperiment()
+        
+        # Process data_func if it exists
+        if "data_func" in setup_config and callable(setup_config["data_func"]):
+            setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
 
-        setup_config.pop("data_func", None)
+        # Perform clustering setup
+        setup_result = await to_thread.run_sync(clustering_instance.setup, **setup_config)
+        logger.info(f"Setup result: {setup_result}")
 
-        setup_future = to_thread.run_sync(clustering.setup, **setup_config)
-        setup_result = await setup_future
-
-        train_future = to_thread.run_sync(clustering.create_model, **train_config)
-        train_result = await train_future
+        # Perform clustering model training
+        train_result = await to_thread.run_sync(clustering_instance.create_model, **train_config)
+        logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
         logger.info("Clustering setup and training completed successfully.")
@@ -657,16 +705,20 @@ async def regression_endpoint(
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
-        if callable(setup_config.get("data_func")):
-            setup_config["data"] = setup_config.pop("data_func")()
+        # Create an instance of the clustering class
+        regression_instance = regression.RegressiongExperiment()
+        
+        # Process data_func if it exists
+        if "data_func" in setup_config and callable(setup_config["data_func"]):
+            setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
 
-        setup_config.pop("data_func", None)
+        # Perform regression setup
+        setup_result = await to_thread.run_sync(regression_instance.setup, **setup_config)
+        logger.info(f"Setup result: {setup_result}")
 
-        setup_future = to_thread.run_sync(regression.setup, **setup_config)
-        setup_result = await setup_future
-
-        train_future = to_thread.run_sync(regression.create_model, **train_config)
-        train_result = await train_future
+        # Perform clustering model training
+        train_result = await to_thread.run_sync(regression_instance.create_model, **train_config)
+        logger.info(f"Training result: {train_result}")
 
         result = {"setup": setup_result, "train": train_result}
         logger.info("Regression setup and training completed successfully.")
@@ -688,24 +740,29 @@ async def classification_endpoint(
         setup_config = setup_params.dict()
         train_config = train_params.dict()
 
-        if callable(setup_config.get("data_func")):
-            setup_config["data"] = setup_config.pop("data_func")()
-
-        setup_config.pop("data_func", None)
-
-        setup_future = to_thread.run_sync(time_series.setup, **setup_config)
-        setup_result = await setup_future
-
-        train_future = to_thread.run_sync(tiume_series.create_model, **train_config)
-        train_result = await train_future
-
+        # Create an instance of the time_series class
+        time_series_instance = time_series.TSForecastingExperiment()
+        
+        # Process data_func if it exists
+        if "data_func" in setup_config and callable(setup_config["data_func"]):
+            setup_config["data"] = await to_thread.run_sync(setup_config.pop("data_func"))
+            
+        # Perform time series setup
+        setup_result = await to_thread.run_sync(time_series_instance.setup, **setup_config)
+        logger.info(f"Setup result: {setup_result}")
+        
+        # Perform time series model training
+        train_result = await to_thread.run_sync(tiume_series_instance.create_model, **train_config)
+        logger.info(f"Training result: {train_result}")
+        
         result = {"setup": setup_result, "train": train_result}
-            logger.info("Time series setup and training completed successfully.")
+        logger.info("Time series setup and training completed successfully.")
         return result
         
     except Exception as e:
         logger.error(f"An error occurred during time series: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Create the FastAPI app and include the router
 app = FastAPI()
