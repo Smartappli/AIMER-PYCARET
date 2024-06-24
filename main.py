@@ -46,7 +46,7 @@ class AnomalyDetectionSetup(BaseModel):
     data_func: Optional[
         Callable[[], Union[dict, list, tuple, ndarray, spmatrix, DataFrame]]
     ] = None
-    index: Union[bool, int, str, list, tuple, ndarray, Series] = True
+    index: bool | int | str | list | tuple | ndarray | Series = True
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
     categorical_features: Optional[List[str]] = None
