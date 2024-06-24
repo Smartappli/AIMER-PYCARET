@@ -104,7 +104,7 @@ class AnomalyDetectionSetup(BaseModel):
 
 
 class AnomalyDetectionParams(BaseModel):
-    model: Union[str, Any]
+    model: str | Any
     fraction: float = 0.05
     verbose: bool = True
     fit_kwargs: Optional[dict] = None
@@ -134,13 +134,13 @@ class ModelClassification(str, Enum):
 
 class ClassificationSetup(BaseModel):
     data: Optional[
-        Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
+        dict | list | tuple | ndarray | spmatrix | DataFrame
     ] = None
     data_func: Optional[
-        Callable[[], Union[dict, list, tuple, ndarray, spmatrix, DataFrame]]
+        Callable[[], dict |list | tuple | ndarray | spmatrix | DataFrame]
     ] = None
-    target: Union[int, str, list, tuple, ndarray, Series] = -1
-    index: Union[bool, int, str, list, tuple, ndarray, Series] = True
+    target: int | str | list | tuple | ndarray | Series = -1
+    index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
     test_data: Optional[
         Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
