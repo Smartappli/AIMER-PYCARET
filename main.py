@@ -1,6 +1,6 @@
 from enum import Enum
 from logging import Logger
-from typing import Optional, Union, Callable, Dict, List, Any
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import pycaret
 from anyio import to_thread
