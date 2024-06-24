@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from enum import Enum
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional
@@ -9,7 +10,7 @@ import pycaret.clustering as clustering
 import pycaret.regression as regression
 import pycaret.time_series as time_series
 from anyio import to_thread
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from joblib import Memory
 from numpy import ndarray
 from pandas import DataFrame, Series
@@ -18,6 +19,11 @@ from pydantic import BaseModel
 from scipy.sparse import spmatrix
 from loguru import logger
 
+
+# Secret key to encode and decode JWT tokens
+SECRET_KEY = "your_secret_key"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
