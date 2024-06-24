@@ -1,6 +1,6 @@
 from enum import Enum
 from logging import Logger
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional
 
 import pycaret
 from anyio import to_thread
@@ -344,9 +344,7 @@ class RegressionSetup(BaseModel):
     html: bool = True
     session_id: Optional[int] = None
     system_log: bool | str | Logger = True
-    log_experiment: Union[
-        bool, str, BaseLogger, List[Union[str, BaseLogger]]
-    ] = False
+    log_experiment:  bool | str | BaseLogger | List[str | BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
     log_plots: bool | list = False
@@ -360,12 +358,12 @@ class RegressionSetup(BaseModel):
 
 
 class RegressionParams(BaseModel):
-    estimator: Union[str, Any]
-    fold: Optional[Union[int, Any]] = None
+    estimator: str | Any
+    fold: Optional[int | Any] = None
     round: int = 4
     cross_validation: bool = True
     fit_kwargs: Optional[dict] = None
-    groups: Optional[Union[str, Any]] = None
+    groups: Optional[str | Any] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
     engine: Optional[str] = None
     verbose: bool = True
@@ -388,9 +386,9 @@ class TimeSeriesSetup(BaseModel):
     fe_exogenous: Optional[list] = None
     fold_strategy: str | Any = "expanding"
     fold: int = 3
-    fh: Optional[Union[List[int], int, ndarray, ForecastingHorizon]] = 1
+    fh: Optional[List[int] | int | ndarray | ForecastingHorizon] = 1
     hyperparameter_split: str = "all"
-    seasonal_period: Optional[Union[List[Union[int, str]], int, str]] = None
+    seasonal_period: Optional[List[int | str] | int | str] = None
     ignore_seasonality_test: bool = False
     sp_detection: str = "auto"
     max_sp_to_consider: Optional[int] = 60
