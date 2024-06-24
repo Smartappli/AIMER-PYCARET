@@ -14,7 +14,9 @@ import pycaret.regression as regression
 import pycaret.time_series as time_series
 from anyio import to_thread
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from joblib import Memory
+from jose import JWTError, jwt
 from numpy import ndarray
 from pandas import DataFrame, Series
 from pycaret.loggers.base_logger import BaseLogger
@@ -462,6 +464,7 @@ class TimeSeriesParams(BaseModel):
 
 # Initialize the API router
 router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 @app.get("/")
 async def root():
