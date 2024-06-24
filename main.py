@@ -510,10 +510,28 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     except JWTError:
         raise credentials_exception
     return token_data
+
     
-@app.get("/")
+@router.get("/")
 async def root():
     return {"pycaret_version": pycaret.__version__}
+
+
+@router.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    # Authentifiez l'utilisateur ici (exemple simplifié)
+    user_dict = {"username": form_data.username, "password": form_data.password}
+    if not (user_dict["username"] == "test" and user_dict["password"] == "password"):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user_dict["username"]}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @app.get("/model/{model_type}")
@@ -565,7 +583,9 @@ async def anomaly_detection_endpoint(
 
 @router.post("/classification")
 async def classification_endpoint(
-    setup_params: ClassificationSetup, train_params: ClassificationParams
+    setup_params: ClassificationSetup,
+    train_params: ClassificationParams,
+    current_user: TokenData = Depends(get_current_user)
 ):
     try:
         logger.info("Starting classification setup and training.")
@@ -597,7 +617,9 @@ async def classification_endpoint(
 
 @router.post("/clustering")
 async def clustering_endpoint(
-    setup_params: ClusteringSetup, train_params: ClusteringParams
+    setup_params: ClusteringSetup,
+    train_params: ClusteringParams,
+    current_user: TokenData = Depends(get_current_user)
 ):
     try:
         logger.info("Starting clustering setup and training.")
@@ -626,7 +648,9 @@ async def clustering_endpoint(
 
 @router.post("/regression")
 async def regression_endpoint(
-    setup_params: RegressionSetup, train_params: RegressionParams
+    setup_params: RegressionSetup,
+    train_params: RegressionParams,
+    current_user: TokenData = Depends(get_current_user)
 ):
     try:
         logger.info("Starting regression setup and training.")
@@ -655,7 +679,9 @@ async def regression_endpoint(
 
 @router.post("/time_series")
 async def classification_endpoint(
-    setup_params: TimeSeriesSetup, train_params: TimeSeriesParams
+    setup_params: TimeSeriesSetup,
+    train_params: TimeSeriesParams,
+    current_user: TokenData = Depends(get_current_user)
 ):
     try:
         logger.info("Starting time series setup and training.")
