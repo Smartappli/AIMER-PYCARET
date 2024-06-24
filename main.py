@@ -277,7 +277,7 @@ class ClusteringSetup(BaseModel):
     normalize_method: str = "zscore"
     pca: bool = False
     pca_method: str = "linear"
-    pca_components: Optional[int | float  str]] = None
+    pca_components: Optional[int | float  str] = None
     custom_pipeline: Optional[Any] = None
     custom_pipeline_position: int = -1
     n_jobs: Optional[int] = -1
