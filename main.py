@@ -88,9 +88,9 @@ class AnomalyDetectionSetup(BaseModel):
     use_gpu: bool = False
     html: bool = True
     session_id: Optional[int] = None
-    system_log: Union[bool, str, Logger] = True
+    system_log: bool | str | Logger = True
     log_experiment: Union[
-        bool, str, BaseLogger, List[Union[str, BaseLogger]]
+        bool, str, BaseLogger, List[str |  BaseLogger]
     ] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
@@ -143,7 +143,7 @@ class ClassificationSetup(BaseModel):
     index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
     test_data: Optional[
-        Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
+        dict | list | tuple | ndarray |  spmatrix | DataFrame
     ] = None
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
@@ -158,8 +158,8 @@ class ClassificationSetup(BaseModel):
     numeric_imputation: str = "mean"
     categorical_imputation: str = "mode"
     iterative_imputation_iters: int = 5
-    numeric_iterative_imputer: Union[str, Any] = "lightgbm"
-    categorical_iterative_imputer: Union[str, Any] = "lightgbm"
+    numeric_iterative_imputer: str | Any = "lightgbm"
+    categorical_iterative_imputer: str | Any = "lightgbm"
     text_features_method: str = "tf-idf"
     max_encoding_ohe: int = 25
     encoding_method: Optional[Any] = None
@@ -177,42 +177,42 @@ class ClassificationSetup(BaseModel):
     outliers_method: str = "iforest"
     outliers_threshold: float = 0.05
     fix_imbalance: bool = False
-    fix_imbalance_method: Union[str, Any] = "SMOTE"
+    fix_imbalance_method: str | Any = "SMOTE"
     transformation: bool = False
     transformation_method: str = "yeo-johnson"
     normalize: bool = False
     normalize_method: str = "zscore"
     pca: bool = False
     pca_method: str = "linear"
-    pca_components: Optional[Union[int, float, str]] = None
+    pca_components: Optional[int | float | str] = None
     feature_selection: bool = False
     feature_selection_method: str = "classic"
-    feature_selection_estimator: Union[str, Any] = "lightgbm"
-    n_features_to_select: Union[int, float] = 0.2
+    feature_selection_estimator: str | Any = "lightgbm"
+    n_features_to_select: int | float = 0.2
     custom_pipeline: Optional[Any] = None
     custom_pipeline_position: int = -1
     data_split_shuffle: bool = True
-    data_split_stratify: Union[bool, List[str]] = True
-    fold_strategy: Union[str, Any] = "stratifiedkfold"
+    data_split_stratify: bool | List[str] = True
+    fold_strategy: str | Any = "stratifiedkfold"
     fold: int = 10
     fold_shuffle: bool = False
-    fold_groups: Optional[Union[str, DataFrame]] = None
+    fold_groups: Optional[str | DataFrame] = None
     n_jobs: Optional[int] = -1
     use_gpu: bool = False
     html: bool = True
     session_id: Optional[int] = None
-    system_log: Union[bool, str, Logger] = True
-    log_experiment: Union[
-        bool, str, BaseLogger, List[Union[str, BaseLogger]]
+    system_log: bool | str | Logger = True
+    log_experiment: 
+        bool | str | BaseLogger | List[str | BaseLogger
     ] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
-    log_plots: Union[bool, list] = False
+    log_plots: bool | list = False
     log_profile: bool = False
     log_data: bool = False
     engine: Optional[Dict[str, str]] = None
     verbose: bool = True
-    memory: Union[bool, str, Memory] = True
+    memory: bool | str | Memory = True
     profile: bool = False
     profile_kwargs: Optional[Dict[str, Any]] = None
 
@@ -245,12 +245,12 @@ class ModelClustering(str, Enum):
 
 class ClusteringSetup(BaseModel):
     data: Optional[
-        Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
+        dict | list | tuple | ndarray | spmatrix | DataFrame
     ] = None
     data_func: Optional[
-        Callable[[], Union[dict, list, tuple, ndarray, spmatrix, DataFrame]]
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
     ] = None
-    index: Union[bool, int, str, list, tuple, ndarray, Series] = True
+    index: bool | int | str | list | tuple | ndarray | Series = True
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
     categorical_features: Optional[List[str]] = None
