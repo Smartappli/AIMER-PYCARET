@@ -1,4 +1,7 @@
+import os
+
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 from enum import Enum
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional
@@ -20,10 +23,13 @@ from scipy.sparse import spmatrix
 from loguru import logger
 
 
-# Secret key to encode and decode JWT tokens
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# Load environment variables from .env file
+load_dotenv()
+
+# Read variables from environment
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 # Initialize the logger
 logger = logging.getLogger(__name__)
