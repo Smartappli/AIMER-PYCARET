@@ -87,7 +87,7 @@ class AnomalyDetectionSetup(BaseModel):
     html: bool = True
     session_id: Optional[int] = None
     system_log: bool | str | Logger = True
-    log_experiment: bool | str | BaseLogger | List[str |  BaseLogger] = False
+    log_experiment: bool | str | BaseLogger | List[str | BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
     log_plots: bool | list = False
@@ -137,7 +137,7 @@ class ClassificationSetup(BaseModel):
     index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
     test_data: Optional[
-        dict | list | tuple | ndarray |  spmatrix | DataFrame
+        dict | list | tuple | ndarray | spmatrix | DataFrame
     ] = None
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
@@ -237,7 +237,9 @@ class ModelClustering(str, Enum):
 
 class ClusteringSetup(BaseModel):
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
-    data_func: Optional[Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]] = None
+    data_func: Optional[
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
+    ] = None
     index: bool | int | str | list | tuple | ndarray | Series = True
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
@@ -332,11 +334,15 @@ class ModelRegression(str, Enum):
 
 class RegressionSetup(BaseModel):
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
-    data_func: Optional[Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]] = None
+    data_func: Optional[
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
+    ] = None
     target: int | str | list | tuple | ndarray | Series = -1
     index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
-    test_data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
+    test_data: Optional[
+        dict | list | tuple | ndarray | spmatrix | DataFrame
+    ] = None
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
     categorical_features: Optional[List[str]] = None

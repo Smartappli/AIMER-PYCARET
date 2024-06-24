@@ -65,6 +65,7 @@ def test_get_model_anomaly_detection():
     assert response.status_code == 200
     assert response.json() == {"model_name": ModelType.anomaly_detection.value}
 
+
 def test_train_anomaly_detection_model():
     params = AnomalyDetectionParams(model="iforest", fraction=0.1, verbose=True)
     response = client.post("/anomaly-detection", json=params.dict())
@@ -72,12 +73,16 @@ def test_train_anomaly_detection_model():
     assert response.json()["model_type"] == "anomaly_detection"
     assert response.json()["params"]["model"] == "iforest"
 
+
 def test_train_classification_model():
-    params = ClassificationParams(estimator="rf", fold=5, round=3, cross_validation=True)
+    params = ClassificationParams(
+        estimator="rf", fold=5, round=3, cross_validation=True
+    )
     response = client.post("/classification", json=params.dict())
     assert response.status_code == 200
     assert response.json()["model_type"] == "classification"
     assert response.json()["params"]["estimator"] == "rf"
+
 
 def test_train_clustering_model():
     params = ClusteringParams(model="kmeans", num_clusters=3, verbose=True)
@@ -86,15 +91,21 @@ def test_train_clustering_model():
     assert response.json()["model_type"] == "clustering"
     assert response.json()["params"]["model"] == "kmeans"
 
+
 def test_train_regression_model():
-    params = RegressionParams(estimator="lr", fold=10, round=2, cross_validation=True)
+    params = RegressionParams(
+        estimator="lr", fold=10, round=2, cross_validation=True
+    )
     response = client.post("/regression", json=params.dict())
     assert response.status_code == 200
     assert response.json()["model_type"] == "regression"
     assert response.json()["params"]["estimator"] == "lr"
 
+
 def test_train_time_series_model():
-    params = TimeSeriesParams(estimator="arima", fold=3, round=4, cross_validation=True)
+    params = TimeSeriesParams(
+        estimator="arima", fold=3, round=4, cross_validation=True
+    )
     response = client.post("/time-series", json=params.dict())
     assert response.status_code == 200
     assert response.json()["model_type"] == "time_series"
