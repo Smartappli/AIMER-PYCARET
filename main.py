@@ -41,10 +41,10 @@ class ModelAnomalyDetection(str, Enum):
 
 class AnomalyDetectionSetup(BaseModel):
     data: Optional[
-        Union[dict, list, tuple, ndarray, spmatrix, DataFrame]
+        dict | list |tuple | ndarray | spmatrix | DataFrame
     ] = None
     data_func: Optional[
-        Callable[[], Union[dict, list, tuple, ndarray, spmatrix, DataFrame]]
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
     ] = None
     index: bool | int | str | list | tuple | ndarray | Series = True
     ordinal_features: Optional[Dict[str, list]] = None
@@ -81,7 +81,7 @@ class AnomalyDetectionSetup(BaseModel):
     normalize_method: str = "zscore"
     pca: bool = False
     pca_method: str = "linear"
-    pca_components: Optional[Union[int, float, str]] = None
+    pca_components: Optional[int | float | str] = None
     custom_pipeline: Optional[Any] = None
     custom_pipeline_position: int = -1
     n_jobs: Optional[int] = -1
@@ -94,11 +94,11 @@ class AnomalyDetectionSetup(BaseModel):
     ] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
-    log_plots: Union[bool, list] = False
+    log_plots: bool | list = False
     log_profile: bool = False
     log_data: bool = False
     verbose: bool = True
-    memory: Union[bool, str, Memory] = True
+    memory: bool | str |Memory = True
     profile: bool = False
     profile_kwargs: Optional[Dict[str, Any]] = None
 
