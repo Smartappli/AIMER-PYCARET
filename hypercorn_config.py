@@ -8,6 +8,7 @@ from main import app
 
 load_dotenv()
 
+
 def load_config() -> Config:
     """
     Load the server configuration from environment variables.
@@ -24,6 +25,7 @@ def load_config() -> Config:
     config.bind = bind_addresses
     return config
 
+
 async def main():
     """
     Main entry point for the asynchronous server.
@@ -34,6 +36,7 @@ async def main():
     config = load_config()
     async with anyio.create_task_group() as task_group:
         await task_group.spawn(serve, app, config)
+
 
 if __name__ == "__main__":
     anyio.run(main)
