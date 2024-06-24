@@ -196,9 +196,7 @@ class ClassificationSetup(BaseModel):
     html: bool = True
     session_id: Optional[int] = None
     system_log: bool | str | Logger = True
-    log_experiment: 
-        bool | str | BaseLogger | List[str | BaseLogger
-    ] = False
+    log_experiment: bool | str | BaseLogger | List[str | BaseLogger] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
     log_plots: bool | list = False
@@ -238,12 +236,8 @@ class ModelClustering(str, Enum):
 
 
 class ClusteringSetup(BaseModel):
-    data: Optional[
-        dict | list | tuple | ndarray | spmatrix | DataFrame
-    ] = None
-    data_func: Optional[
-        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
-    ] = None
+    data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
+    data_func: Optional[Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]] = None
     index: bool | int | str | list | tuple | ndarray | Series = True
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
@@ -338,9 +332,7 @@ class ModelRegression(str, Enum):
 
 class RegressionSetup(BaseModel):
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
-    data_func: Optional[
-        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
-    ] = None
+    data_func: Optional[Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]] = None
     target: int | str | list | tuple | ndarray | Series = -1
     index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
@@ -401,18 +393,18 @@ class RegressionSetup(BaseModel):
     use_gpu: bool = False
     html: bool = True
     session_id: Optional[int] = None
-    system_log: Union[bool, str, Logger] = True
+    system_log: bool | str | Logger = True
     log_experiment: Union[
         bool, str, BaseLogger, List[Union[str, BaseLogger]]
     ] = False
     experiment_name: Optional[str] = None
     experiment_custom_tags: Optional[Dict[str, Any]] = None
-    log_plots: Union[bool, list] = False
+    log_plots: bool | list = False
     log_profile: bool = False
     log_data: bool = False
     engine: Optional[Dict[str, str]] = None
     verbose: bool = True
-    memory: Union[bool, str, Memory] = True
+    memory: bool | str | Memory = True
     profile: bool = False
     profile_kwargs: Optional[Dict[str, Any]] = None
 
