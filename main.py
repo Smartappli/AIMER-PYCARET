@@ -491,7 +491,7 @@ async def train_classification(params: ClassificationParams):
         return {"Error": str(e)}   
 
 
-@app.post("/setup/clustering")
+@app.post("/setup/clustering/")
 async def setup_clustering(setup_params: ClusteringSetup):
     """Setup clustering models with the provided parameters."""
     try:
@@ -509,6 +509,54 @@ async def train_clustering(params: ClusteringParams):
     try:
         result = await to_thread.run_sync(
             pycaret.clustering.create_model, **params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)} 
+
+
+@app.post("/setup/regression/")
+async def setup_regression(setup_params: RegressionSetup):
+    """Setup regression models with the provided parameters."""
+    try:
+        result = await to_thread.run_sync(
+            pycaret.regression.setup, **setup_params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)}
+
+
+@app.post("/train/regression/")
+async def train_regression(params: RegressiongParams):
+    """Train regression models with the provided parameters."""
+    try:
+        result = await to_thread.run_sync(
+            pycaret.regression.create_model, **params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)}
+
+
+@app.post("/setup/time_series/")
+async def setup_time_series(setup_params: TimeSeriesgSetup):
+    """Setup time series models with the provided parameters."""
+    try:
+        result = await to_thread.run_sync(
+            pycaret.time_series.setup, **setup_params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)}
+
+
+@app.post("/train/time_series/")
+async def train_time_series(params: TimeSeriesParams):
+    """Train time series models with the provided parameters."""
+    try:
+        result = await to_thread.run_sync(
+            pycaret.time_series.create_model, **params.dict()
         )
         return result
     except Exception as e:
