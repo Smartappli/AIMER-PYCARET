@@ -611,8 +611,42 @@ async def anomaly_detection_endpoint(
             train_result = await to_thread.run_sync(anomaly_instance.create_model, **train_config)
             logger.info(f"Training result: {train_result}")
 
-        result = {"setup": setup_result, "train": train_result}
-        logger.info("Anomaly detection setup and training completed successfully.")
+        # Perform model evaluation
+        evaluate_result = await to_thread.run_sync(anomaly_instance.evaluate_model, train_result)
+        logger.info(f"Evaluation result: {evaluate_result}")
+
+        # Perform model tuning
+        tune_result = await to_thread.run_sync(anomaly_instance.tune_model, train_result)
+        logger.info(f"Tuning result: {tune_result}")
+
+        # Perform model plotting
+        plot_result = await to_thread.run_sync(anomaly_instance.plot_model, tune_result, plot="confusion_matrix")
+        logger.info(f"Plotting result: {plot_result}")
+
+        # Perform model interpretation
+        interpret_result = await to_thread.run_sync(anomaly_instance.interpret_model, tune_result)
+        logger.info(f"Interpretation result: {interpret_result}")
+
+        # Finalize the model
+        finalize_result = await to_thread.run_sync(anomaly_instance.finalize_model, tune_result)
+        logger.info(f"Finalize result: {finalize_result}")
+
+        # Save the model
+        save_path = f"anomaly_model_{current_user.username}.pkl"  # Save the model with the user's username
+        save_result = await to_thread.run_sync(anomaly_instance.save_model, finalize_result, save_path)
+        logger.info(f"Model saved at: {save_path}")
+
+        result = {
+            "setup": setup_result,
+            "train": train_result,
+            "evaluate": evaluate_result,
+            "tune": tune_result,
+            "plot": plot_result,
+            "interpret": interpret_result,
+            "finalize": finalize_result,
+            "save": save_result
+        }
+        logger.info("Anomaly detection setup, training, evaluation, tuning, plotting, interpretation, finalization, and saving completed successfully.")
         return result
         
     except Exception as e:
