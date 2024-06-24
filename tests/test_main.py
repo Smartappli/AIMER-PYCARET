@@ -1,8 +1,10 @@
 import os
-import pytest
-import anyio
 from unittest.mock import patch, MagicMock
+
+import anyio
+import pytest
 from hypercorn.config import Config
+
 from main import load_config, main
 
 
