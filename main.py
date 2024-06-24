@@ -430,26 +430,6 @@ class TimeSeriesParams(BaseModel):
     verbose: bool = True
 
 
-def train_anomaly_detection_model(params: AnomalyDetectionParams):
-    return {"model_type": "anomaly_detection", "params": params.dict()}
-
-
-def train_classification_model(params: ClassificationParams):
-    return {"model_type": "classification", "params": params.dict()}
-
-
-def train_clustering_model(params: ClusteringParams):
-    return {"model_type": "clustering", "params": params.dict()}
-
-
-def train_regression_model(params: RegressionParams):
-    return {"model_type": "regression", "params": params.dict()}
-
-
-def train_time_series_model(params: TimeSeriesParams):
-    return {"model_type": "time_series", "params": params.dict()}
-
-
 @app.get("/")
 async def root():
     return {"pycaret_version": pycaret.__version__}
@@ -463,32 +443,6 @@ async def get_type(model_type: ModelType):
         return pycaret_models[model_type]
     else:
         return {"error": "Model Type Unknown"}
-
-
-@app.get("/type/{model_name}")
-async def get_model(model_name: ModelType):
-    return {"model_name": model_name}
-
-
-@app.post("/model/{model_type}")
-async def create_model(model_type: ModelType, params: ClassificationParams):
-    if model_type == ModelType.anomaly_detection:
-        result = await to_thread.run_sync(train_anomaly_detection_model, params)
-        return result
-    elif model_type == ModelType.classification:
-        result = await to_thread.run_sync(train_classification_model, params)
-        return result
-    elif model_type == ModelType.clustering:
-        result = await to_thread.run_sync(train_clustering_model, params)
-        return rsult
-    elif model_type == ModelType.regression:
-        result = await to_thread.run_sync(train_regression_model, params)
-        return result
-    elif model_type == ModelType.time_series:
-        result = await to_thread.run_sync(train_time_serues_model, params)
-        return result
-    else:
-        return {"error": "Model Type Not Supported for Training"}
 
 
 @app.post("/setup/anomaly_detection/")
@@ -518,16 +472,46 @@ async def train_anomaly_detection(params: AnomalyDetectionParams):
 @app.post("/setup/classification/")
 async def setup_classification(setup_params: ClassificationSetup):
     """Setup classification models with the provided parameters."""
-    result = await to_thread.run_sync(
-        pycaret.classification.setup, **setup_params.dict()
-    )
-    return result
+    try:
+        result = await to_thread.run_sync(
+            pycaret.classification.setup, **setup_params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)}        
 
 
 @app.post("/train/classification/")
 async def train_classification(params: ClassificationParams):
     """Train classification models with the provided parameters."""
-    result = await to_thread.run_sync(
-        pycaret.classification.create_model, **params.dict()
-    )
-    return result
+    try:
+        result = await to_thread.run_sync(
+            pycaret.classification.create_model, **params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)}   
+
+
+@app.post("/setup/clustering")
+async def setup_clustering(setup_params: ClusteringSetup):
+    """Setup clustering models with the provided parameters."""
+    try:
+        result = await to_thread.run_sync(
+            pycaret.clustering.setup, **setup_params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)}
+
+
+@app.post("/train/clustering/")
+async def train_clustering(params: ClusteringParams):
+    """Train clustering models with the provided parameters."""
+    try:
+        result = await to_thread.run_sync(
+            pycaret.clustering.create_model, **params.dict()
+        )
+        return result
+    except Exception as e:
+        return {"Error": str(e)} 
