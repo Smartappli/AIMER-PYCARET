@@ -14,8 +14,10 @@ from scipy.sparse import spmatrix
 
 app = FastAPI()
 
+
 class ModelType(str, Enum):
     """Enumeration for different types of models."""
+
     anomaly_detection = "anomaly detection"
     classification = "classification"
     clustering = "clustering"
@@ -25,17 +27,20 @@ class ModelType(str, Enum):
 
 def get_pycaret_models() -> Dict[ModelType, list]:
     models = {
-        ModelType.anomaly_detection: available_estimators(type='anomaly_detection'),
-        ModelType.classification: available_estimators(type='classification'),
-        ModelType.clustering: available_estimators(type='clustering'),
-        ModelType.regression: available_estimators(type='regression'),
-        ModelType.time_series: available_estimators(type='time_series')
+        ModelType.anomaly_detection: available_estimators(
+            type="anomaly_detection"
+        ),
+        ModelType.classification: available_estimators(type="classification"),
+        ModelType.clustering: available_estimators(type="clustering"),
+        ModelType.regression: available_estimators(type="regression"),
+        ModelType.time_series: available_estimators(type="time_series"),
     }
     return models
 
 
 class AnomalyDetectionSetup(BaseModel):
     """Setup parameters for anomaly detection models."""
+
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
     data_func: Optional[
         Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
@@ -97,6 +102,7 @@ class AnomalyDetectionSetup(BaseModel):
 
 class AnomalyDetectionParams(BaseModel):
     """Parameters for training anomaly detection models."""
+
     model: str | Any
     fraction: float = 0.05
     verbose: bool = True
@@ -106,6 +112,7 @@ class AnomalyDetectionParams(BaseModel):
 
 class ClassificationSetup(BaseModel):
     """Setup parameters for classification models."""
+
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
     data_func: Optional[
         Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
@@ -185,8 +192,10 @@ class ClassificationSetup(BaseModel):
     profile: bool = False
     profile_kwargs: Optional[Dict[str, Any]] = None
 
+
 class ClassificationParams(BaseModel):
     """Parameters for training classification models."""
+
     model: str | Any
     verbose: bool = True
     fit_kwargs: Optional[dict] = None
@@ -200,7 +209,9 @@ class ClassificationParams(BaseModel):
 
 class ClusteringSetup(BaseModel):
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
-    data_func: Optional[Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]] = None
+    data_func: Optional[
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
+    ] = None
     index: bool | int | str | list | tuple | ndarray | Series = True
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
@@ -267,11 +278,15 @@ class ClusteringParams(BaseModel):
 
 class RegressionSetup(BaseModel):
     data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
-    data_func: Optional[Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]] = None
+    data_func: Optional[
+        Callable[[], dict | list | tuple | ndarray | spmatrix | DataFrame]
+    ] = None
     target: int | str | list | tuple | ndarray | Series = -1
     index: bool | int | str | list | tuple | ndarray | Series = True
     train_size: float = 0.7
-    test_data: Optional[dict | list | tuple | ndarray | spmatrix | DataFrame] = None
+    test_data: Optional[
+        dict | list | tuple | ndarray | spmatrix | DataFrame
+    ] = None
     ordinal_features: Optional[Dict[str, list]] = None
     numeric_features: Optional[List[str]] = None
     categorical_features: Optional[List[str]] = None
@@ -439,18 +454,21 @@ def train_time_series_model(params: TimeSeriesParams):
 async def root():
     return {"pycaret_version": pycaret.__version__}
 
+
 @app.get("/model/{model_type}")
 async def get_type(model_type: ModelType):
     pycaret_models = get_pycaret_models()
-    
+
     if model_type in pycaret_models:
         return pycaret_models[model_type]
     else:
         return {"error": "Model Type Unknown"}
 
+
 @app.get("/type/{model_name}")
 async def get_model(model_name: ModelType):
     return {"model_name": model_name}
+
 
 @app.post("/model/{model_type}")
 async def create_model(model_type: ModelType, params: ClassificationParams):
@@ -471,33 +489,45 @@ async def create_model(model_type: ModelType, params: ClassificationParams):
         return result
     else:
         return {"error": "Model Type Not Supported for Training"}
-  
+
+
 @app.post("/setup/anomaly_detection/")
 async def setup_anomaly_detection(setup_params: AnomalyDetectionSetup):
     """Setup anomaly detection models with the provided parameters."""
     try:
-        result = await to_thread.run_sync(pycaret.anomaly.setup, **setup_params.dict())
+        result = await to_thread.run_sync(
+            pycaret.anomaly.setup, **setup_params.dict()
+        )
         return result
     except Exception as e:
         return {"Error": str(e)}
+
 
 @app.post("/train/anomaly_detection/")
 async def train_anomaly_detection(params: AnomalyDetectionParams):
     """Train anomaly detection models with the provided parameters."""
     try:
-        result = await to_thread.run_sync(pycaret.anomaly.create_model, **params.dict())
+        result = await to_thread.run_sync(
+            pycaret.anomaly.create_model, **params.dict()
+        )
         return result
     except Exception as e:
-        return {"Error": str(e)}        
+        return {"Error": str(e)}
+
 
 @app.post("/setup/classification/")
 async def setup_classification(setup_params: ClassificationSetup):
     """Setup classification models with the provided parameters."""
-    result = await to_thread.run_sync(pycaret.classification.setup, **setup_params.dict())
+    result = await to_thread.run_sync(
+        pycaret.classification.setup, **setup_params.dict()
+    )
     return result
+
 
 @app.post("/train/classification/")
 async def train_classification(params: ClassificationParams):
     """Train classification models with the provided parameters."""
-    result = await to_thread.run_sync(pycaret.classification.create_model, **params.dict())
+    result = await to_thread.run_sync(
+        pycaret.classification.create_model, **params.dict()
+    )
     return result
