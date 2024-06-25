@@ -110,7 +110,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install uv
-        python -m uv pip install pylint
+        python -m uv pip install -r requirements-tests.txt
         python -m uv pip install -r requirements.txt
         
     - name: Install dependencies on Windows
@@ -118,7 +118,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install uv
-        python -m uv pip install pylint
+        python -m uv pip install -r requirements-tests.txt
         python -m uv pip install -r requirements.txt
         
     - name: Install dependencies on Ubuntu
@@ -126,7 +126,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install uv
-        python -m uv pip install pylint
+        python -m uv pip install -r requirements-tests.txt
         python -m uv pip install -r requirements.txt
         
     - name: Analysing the code with pylint
@@ -177,7 +177,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install bandit[sarif] uv
+          python -m uv pip install -r requirements-tests.txt
           python -m uv pip install -r requirements.txt     
 
       # Execute Bandit
