@@ -16,7 +16,7 @@ from anyio import to_thread
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from joblib import Memory
-from jose import JWTError, jwt
+import jwt
 from numpy import ndarray
 from pandas import DataFrame, Series
 from pycaret.loggers.base_logger import BaseLogger
