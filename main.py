@@ -17,6 +17,7 @@ from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from joblib import Memory
 import jwt
+from jwt import PyJWTError
 from numpy import ndarray
 from pandas import DataFrame, Series
 from pycaret.loggers.base_logger import BaseLogger
@@ -525,7 +526,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if username is None:
             raise credentials_exception
         token_data = TokenData(username=username)
-    except JWTError:
+    except PyJWTError:
         raise credentials_exception
     user = get_user(fake_users_db, username=token_data.username)
     if user is None:
