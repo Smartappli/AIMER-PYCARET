@@ -1,7 +1,7 @@
 # test_router.py
 import pytest
 from fastapi import status
-from app.router import ModelType
+from main import ModelType
 
 def test_root(test_app):
     response = test_app.get("/")
@@ -24,6 +24,20 @@ def test_anomaly_detection_endpoint(test_app, test_user):
 def test_classification_endpoint(test_app, test_user):
     setup_payload = {"data": {"key": "value"}}  # Adjust payload as per your endpoint
     response = test_app.post("/classification", json=setup_payload, headers={"Authorization": f"Bearer {create_access_token({'sub': test_user['username']})}"})
+    assert response.status_code == status.HTTP_200_OK
+    assert "setup" in response.json()
+    assert "train" in response.json()  # Adjust assertions based on expected output
+
+def test_clustering_endpoint(test_app, test_user):
+    setup_payload = {"data": {"key": "value"}}  # Adjust payload as per your endpoint
+    response = test_app.post("/clustering", json=setup_payload, headers={"Authorization": f"Bearer {create_access_token({'sub': test_user['username']})}"})
+    assert response.status_code == status.HTTP_200_OK
+    assert "setup" in response.json()
+    assert "train" in response.json()  # Adjust assertions based on expected output
+
+def test_regression_endpoint(test_app, test_user):
+    setup_payload = {"data": {"key": "value"}}  # Adjust payload as per your endpoint
+    response = test_app.post("/regression", json=setup_payload, headers={"Authorization": f"Bearer {create_access_token({'sub': test_user['username']})}"})
     assert response.status_code == status.HTTP_200_OK
     assert "setup" in response.json()
     assert "train" in response.json()  # Adjust assertions based on expected output
