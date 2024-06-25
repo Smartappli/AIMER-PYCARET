@@ -32,12 +32,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install uv
-          python -m uv pip install pytest
+          python -m uv pip install pytest pytest-xdist
           python -m uv pip install -r requirements.txt
            
       - name: Coverage Tests
         run: | 
-          python -m pytest tests/ --verbose
+          python -m pytest tests/ --verbose -n auto
           
   Ruff:
     name: Ruff - Linter
