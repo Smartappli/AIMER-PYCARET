@@ -3,6 +3,7 @@ hypercorn>=0.17.3
 python-dotenv==1.0.1
 pycaret>=3.3.2
 pydantic>=2.7.0,<3.0.0
+PyJWT==2.8.0
 pytest>=8.2.0
 flask>=2.2.5 # not directly required, pinned by Snyk to avoid a vulnerability
 fonttools>=4.43.0 # not directly required, pinned by Snyk to avoid a vulnerability
