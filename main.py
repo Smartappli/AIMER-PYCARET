@@ -807,7 +807,7 @@ async def regression_endpoint(
 
 
 @router.post("/time_series")
-async def classification_endpoint(
+async def time_series_endpoint(
     setup_params: TimeSeriesSetup,
     train_params: TimeSeriesParams,
     current_user: TokenData = Depends(get_current_user),
@@ -834,7 +834,7 @@ async def classification_endpoint(
 
         # Perform time series model training
         train_result = await to_thread.run_sync(
-            tiume_series_instance.create_model, **train_config
+            time_series_instance.create_model, **train_config
         )
         logger.info(f"Training result: {train_result}")
 
