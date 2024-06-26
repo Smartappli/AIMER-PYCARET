@@ -1,30 +1,27 @@
 import os
-
 from datetime import datetime, timedelta, timezone
-from dotenv import load_dotenv
 from enum import Enum
 from logging import Logger
 from typing import Any, Callable, Dict, List, Optional
 
-import pandas as pd
+import jwt
 import pycaret.anomaly as anomaly
 import pycaret.classification as classification
 import pycaret.clustering as clustering
 import pycaret.regression as regression
 import pycaret.time_series as time_series
 from anyio import to_thread
+from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from joblib import Memory
-import jwt
 from jwt import PyJWTError
+from loguru import logger
 from numpy import ndarray
 from pandas import DataFrame, Series
 from pycaret.loggers.base_logger import BaseLogger
 from pydantic import BaseModel
 from scipy.sparse import spmatrix
-from loguru import logger
-
 
 # Load environment variables from .env file
 load_dotenv()
@@ -689,7 +686,7 @@ async def anomaly_detection_endpoint(
         return result
 
     except Exception as e:
-        logger.error(f"An error occurred during anomaly detection: {str(e)}")
+        logger.error(f"An error occurred during anomaly detection: {e!s}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -732,7 +729,7 @@ async def classification_endpoint(
         return result
 
     except Exception as e:
-        logger.error(f"An error occurred during classification: {str(e)}")
+        logger.error(f"An error occurred during classification: {e!s}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -775,7 +772,7 @@ async def clustering_endpoint(
         return result
 
     except Exception as e:
-        logger.error(f"An error occurred during clustering: {str(e)}")
+        logger.error(f"An error occurred during clustering: {e!s}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -816,7 +813,7 @@ async def regression_endpoint(
         return result
 
     except Exception as e:
-        logger.error(f"An error occurred during regression: {str(e)}")
+        logger.error(f"An error occurred during regression: {e!s}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -857,7 +854,7 @@ async def time_series_endpoint(
         return result
 
     except Exception as e:
-        logger.error(f"An error occurred during time series: {str(e)}")
+        logger.error(f"An error occurred during time series: {e!s}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
