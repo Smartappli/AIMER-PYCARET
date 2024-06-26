@@ -1,6 +1,5 @@
-# test_router.py
-import pytest
 from fastapi import status
+
 from main import ModelType
 
 
