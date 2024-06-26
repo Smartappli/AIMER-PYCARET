@@ -601,7 +601,7 @@ async def anomaly_detection_endpoint(
         logger.info(f"Setup result: {setup_result}")
 
         # Check if specific models are specified in train_params
-        models_to_train = train_config.get("models", None)
+        models_to_train = train_config.get("model", None)
 
         # Perform anomaly detection model training
         if not models_to_train:
@@ -719,14 +719,90 @@ async def classification_endpoint(
         )
         logger.info(f"Setup result: {setup_result}")
 
-        # Perform classification model training
-        train_result = await to_thread.run_sync(
-            classification_instance.create_model, **train_config
-        )
-        logger.info(f"Training result: {train_result}")
+        # Check if specific models are specified in train_params
+        models_to_train = train_config.get("model", None)        
 
-        result = {"setup": setup_result, "train": train_result}
-        logger.info("Classification setup and training completed successfully.")
+        # Perform classification model training
+        if not models_to_train:
+            # If no models are specified, use compare_models to evaluate all models
+            logger.info(
+                "No specific models specified, comparing all available models."
+            )
+
+            compare_result = await to_thread.run_sync(
+                classification_instance.compare_models
+            )
+            logger.info(f"Training result: {compare_result}")
+
+            result = {
+                "setup": setup_result,
+                "compare": compare_result,
+            }
+            logger.info(
+                "Classification setup, and model comparison completed successfully."
+            )
+
+        else:
+            # Train the specified model(s)
+            logger.info(f"Training specified models: {models_to_train}")
+            train_result = await to_thread.run_sync(
+                classification_instance.create_model, **train_config
+            )
+            logger.info(f"Training result: {train_result}")
+    
+            # Perform model evaluation
+            evaluate_result = await to_thread.run_sync(
+                classification_instance.evaluate_model, train_result
+            )
+            logger.info(f"Evaluation result: {evaluate_result}")
+
+            # Perform model tuning
+            tune_result = await to_thread.run_sync(
+                classification_instance.tune_model, train_result
+            )
+            logger.info(f"Tuning result: {tune_result}")
+
+            # Perform model plotting
+            plot_result = await to_thread.run_sync(
+                classification_instance.plot_model,
+                tune_result,
+                plot="confusion_matrix",
+            )
+            logger.info(f"Plotting result: {plot_result}")
+
+            # Perform model interpretation
+            interpret_result = await to_thread.run_sync(
+                classification_instance.interpret_model, tune_result
+            )
+            logger.info(f"Interpretation result: {interpret_result}")
+
+            # Finalize the model
+            finalize_result = await to_thread.run_sync(
+                classification_instance.finalize_model, tune_result
+            )
+            logger.info(f"Finalize result: {finalize_result}")
+
+            # Save the model
+            save_path = f"classification_model_{current_user.username}.pkl"  # Save the model with the user's username
+            save_result = await to_thread.run_sync(
+                classification_instance.save_model, finalize_result, save_path
+            )
+            logger.info(f"Model saved at: {save_path}")
+
+            result = {
+                "setup": setup_result,
+                "train": train_result,
+                "evaluate": evaluate_result,
+                "tune": tune_result,
+                "plot": plot_result,
+                "interpret": interpret_result,
+                "finalize": finalize_result,
+                "save": save_result,
+            }
+            logger.info(
+                "Classification setup, training, evaluation, tuning, plotting, interpretation, finalization, and saving completed successfully."
+            )
+        
         return result
 
     except Exception as e:
