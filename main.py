@@ -31,9 +31,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
-# Initialize the logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+# Configure loguru to log INFO level messages to stdout
+logger.remove()  # Remove default configuration
+logger.add(sys.stdout, level="INFO")
 
 
 class ModelType(str, Enum):
