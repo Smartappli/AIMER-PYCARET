@@ -720,7 +720,7 @@ async def classification_endpoint(
         logger.info(f"Setup result: {setup_result}")
 
         # Check if specific models are specified in train_params
-        models_to_train = train_config.get("model", None)        
+        models_to_train = train_config.get("model", None)
 
         # Perform classification model training
         if not models_to_train:
@@ -749,7 +749,7 @@ async def classification_endpoint(
                 classification_instance.create_model, **train_config
             )
             logger.info(f"Training result: {train_result}")
-    
+
             # Perform model evaluation
             evaluate_result = await to_thread.run_sync(
                 classification_instance.evaluate_model, train_result
