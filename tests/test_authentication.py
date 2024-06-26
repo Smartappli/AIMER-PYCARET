@@ -1,5 +1,3 @@
-# test_authentication.py
-import pytest
 from fastapi import status
 
 
