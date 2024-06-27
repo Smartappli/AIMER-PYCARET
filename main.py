@@ -24,6 +24,16 @@ from pycaret.loggers.base_logger import BaseLogger
 from pydantic import BaseModel
 from scipy.sparse import spmatrix
 
+# OpenTelemetry imports
+from opentelemetry import trace, metrics
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -31,12 +41,30 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
-TRACING = os.getenv("TRACING")
-METRICS = os.getenv("METRICS")
+TRACING = os.getenv("TRACING") == "True"
+SYSTEM_METRICS = os.getenv("SYSTEM_METRICS") == "True"
+OTHER_METRICS = os.getenv("OTHER_METRICS") == "True"
 
 # Configure loguru to log INFO level messages to stdout
 logger.remove()  # Remove default configuration
 logger.add(sys.stdout, level="INFO")
+
+# OpenTelemetry setup
+if TRACING:
+    trace.set_tracer_provider(TracerProvider())
+    tracer = trace.get_tracer(__name__)
+    span_processor = BatchSpanProcessor(OTLPSpanExporter())
+    trace.get_tracer_provider().add_span_processor(span_processor)
+
+if SYSTEM_METRICS:
+    from opentelemetry.instrumentation.system_metrics import SystemMetrics
+    SystemMetrics().instrument()
+
+if OTHER_METRICS:
+    metrics.set_meter_provider(MeterProvider())
+    meter = metrics.get_meter(__name__)
+    metric_reader = PeriodicExportingMetricReader(OTLPMetricExporter())
+    metrics.get_meter_provider().add_metric_reader(metric_reader)
 
 
 class ModelType(str, Enum):
@@ -937,6 +965,10 @@ async def time_series_endpoint(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Create the FastAPI app and include the router
+# Create FastAPI application and include router
 app = FastAPI()
 app.include_router(router)
+
+# Instrument FastAPI application with OpenTelemetry
+if TRACING or METRICS:
+    FastAPIInstrumentor.instrument_app(app)
