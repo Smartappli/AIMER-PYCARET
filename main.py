@@ -970,5 +970,5 @@ app = FastAPI()
 app.include_router(router)
 
 # Instrument FastAPI application with OpenTelemetry
-if TRACING or METRICS:
+if TRACING or OTHER_METRICS:
     FastAPIInstrumentor.instrument_app(app)
