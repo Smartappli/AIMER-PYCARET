@@ -1,1 +1,1 @@
-# anomaly
+import pycaret.anomaly as anomaly
