@@ -26,8 +26,12 @@ from scipy.sparse import spmatrix
 
 # OpenTelemetry imports
 from opentelemetry import trace, metrics
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+    OTLPSpanExporter,
+)
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import (
+    OTLPMetricExporter,
+)
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
@@ -58,6 +62,7 @@ if TRACING:
 
 if SYSTEM_METRICS:
     from opentelemetry.instrumentation.system_metrics import SystemMetrics
+
     SystemMetrics().instrument()
 
 if OTHER_METRICS:
@@ -832,7 +837,7 @@ async def classification_endpoint(
             logger.info(
                 "Classification setup, training, evaluation, tuning, plotting, interpretation, finalization, and saving completed successfully."
             )
-        
+
         return result
 
     except Exception as e:
