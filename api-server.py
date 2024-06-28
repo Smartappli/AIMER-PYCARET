@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from hypercorn.asyncio import serve
 from hypercorn.config import Config
 
-from main import app
+from old_main import app
 
 load_dotenv()
 

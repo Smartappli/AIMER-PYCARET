@@ -6,9 +6,13 @@ opentelemetry-sdk==1.25
 opentelemetry-exporter-otlp
 opentelemetry-instrumentation-fastapi
 opentelemetry-instrumentation-system_metrics
+pandas<2.2.0
 python-dotenv==1.0.1
 pycaret>=3.3.2
 pydantic>=2.7.0,<3.0.0
+prophet>=1.1.5
+lightgbm>=4.3.0
+captum==0.7.0
 PyJWT==2.8.0
 flask>=2.2.5 # not directly required, pinned by Snyk to avoid a vulnerability
 fonttools>=4.43.0 # not directly required, pinned by Snyk to avoid a vulnerability

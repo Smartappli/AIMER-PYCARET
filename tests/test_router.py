@@ -1,6 +1,6 @@
 from fastapi import status
 
-from main import ModelType
+from old_main import ModelType
 
 
 def test_root(test_app):
