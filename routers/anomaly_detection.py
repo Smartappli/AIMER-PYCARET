@@ -12,6 +12,6 @@ router = APIRouter(
 
 @router.get("/")
 async def anomaly_detection_models_list() -> list:
-    data = get_data('anomaly')
-    anomaly.setup(data, session_id = 123)
+    data = get_data("anomaly")
+    anomaly.setup(data, session_id=123)
     return anomaly.models().index.tolist()
