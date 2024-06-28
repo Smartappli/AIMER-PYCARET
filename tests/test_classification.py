@@ -6,7 +6,7 @@ from routers import classification
 app = FastAPI()
 app.include_router(classification.router)
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_classification_models_list():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         response = await ac.get("/classification/")
@@ -14,8 +14,8 @@ async def test_classification_models_list():
     assert isinstance(response.json(), list)
     assert len(response.json()) > 0  # Ensure there's at least one model in the list
 
-@pytest.mark.asyncio
-async def test_model_compare():
+@pytest.mark.anyio
+async def test_classification_model_compare():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         response = await ac.get("/classification/compare_models")
     assert response.status_code == 200

@@ -15,7 +15,7 @@ async def test_regression_models_list():
     assert len(response.json()) > 0
 
 @pytest.mark.anyio
-async def test_model_compare():
+async def test_regression_model_compare():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         response = await ac.get("/regression/compare_models")
     assert response.status_code == 200

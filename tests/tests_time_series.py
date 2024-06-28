@@ -6,16 +6,16 @@ from routers import time_series
 app = FastAPI()
 app.include_router(time_series.router)
 
-@pytest.mark.asyncio
-async def test_classification_models_list():
+@pytest.mark.anyio
+async def test_time_series_models_list():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         response = await ac.get("/time_series/")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
     assert len(response.json()) > 0  # Ensure there's at least one model in the list
 
-@pytest.mark.asyncio
-async def test_model_compare():
+@pytest.mark.asyio
+async def test_time_series_model_compare():
     async with AsyncClient(app=app, base_url="http://test") as ac:
         response = await ac.get("/time_series/compare_models")
     assert response.status_code == 200
