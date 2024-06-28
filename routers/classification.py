@@ -16,7 +16,7 @@ class Result(BaseModel):
 
 router = APIRouter(
     prefix="/classification",
-    tags=["classification"],
+    tags=["Classification"],
     responses={404: {"description": "Not found"}},
 )
 
@@ -40,7 +40,7 @@ async def model_compare() -> dict:
     comparison_results = classification.pull()
 
     # Define the metrics you want to extract
-    metrics = ['Model', 'Accuracy', 'AUC', 'Recall', 'Precision', 'F1', 'Kappa', 'MCC', 'TT (Sec)']
+    metrics = ['Model', 'Accuracy', 'AUC', 'Recall', 'Prec.', 'F1', 'Kappa', 'MCC', 'TT (Sec)']
 
     # Add an 'ID' column to the DataFrame
     comparison_results.reset_index(inplace=True)
@@ -53,3 +53,11 @@ async def model_compare() -> dict:
     model_info = comparison_results[available_metrics].to_dict(orient='records')
 
     return {"result": model_info}
+
+
+@router.post("/create_model")
+async def create_model():
+    data = get_data('juice')
+    classification.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
+
+    classification.create_model('lr', return_train_score=True)

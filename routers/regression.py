@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/regression",
-    tags=["regression"],
+    tags=["Regression"],
     responses={404: {"description": "Not found"}},
 )
 
@@ -42,4 +42,3 @@ async def model_compare() -> dict:
     model_info = comparison_results[available_metrics].to_dict(orient='records')
 
     return {"result": model_info}
-

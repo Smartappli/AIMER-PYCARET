@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/time_series",
-    tags=["time_series"],
+    tags=["Time series"],
     responses={404: {"description": "Not found"}},
 )
 

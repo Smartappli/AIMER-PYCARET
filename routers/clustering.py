@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/clustering",
-    tags=["clustering"],
+    tags=["Clustering"],
     responses={404: {"description": "Not found"}},
 )
 

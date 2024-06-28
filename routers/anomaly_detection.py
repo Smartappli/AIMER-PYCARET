@@ -5,7 +5,7 @@ from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/anomaly_detection",
-    tags=["anomaly_detection"],
+    tags=["Anomaly detection"],
     responses={404: {"description": "Not found"}},
 )
 
