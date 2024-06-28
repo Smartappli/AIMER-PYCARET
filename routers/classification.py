@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+from typing import Any, Dict,List
 
 import pycaret.classification as classification
 from pycaret.datasets import get_data
@@ -22,22 +22,24 @@ router = APIRouter(
 
 
 @router.get("/")
-async def classification_models_list() -> list:
+async def classification_models_list() -> List:
     data = get_data('juice')
-    classification.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
-    return classification.models().index.tolist()
+    exp = classification.ClassificationExperiment()
+    exp.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
+    return exp.models().index.tolist()
 
 
 @router.get("/compare_models")
-async def model_compare() -> dict:
+async def model_compare() -> Dict:
     data = get_data('juice')
-    classification.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
+    exp = classification.ClassificationExperiment()
+    exp.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
 
     # Compare all models
-    models = classification.compare_models()
+    models = exp.compare_models()
 
     # Retrieve the latest displayed table with model comparison metrics
-    comparison_results = classification.pull()
+    comparison_results = exp.pull()
 
     # Define the metrics you want to extract
     metrics = ['Model', 'Accuracy', 'AUC', 'Recall', 'Prec.', 'F1', 'Kappa', 'MCC', 'TT (Sec)']
@@ -56,8 +58,9 @@ async def model_compare() -> dict:
 
 
 @router.post("/create_model")
-async def create_model():
+async def create_model() -> Any:
     data = get_data('juice')
-    classification.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
+    exp = classification.ClassificationExperiment()
+    exp.setup(data, target='Purchase', session_id=123, log_experiment=True, experiment_name='juice1')
 
-    classification.create_model('lr', return_train_score=True)
+    exp.create_model('lr', return_train_score=True)

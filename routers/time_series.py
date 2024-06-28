@@ -13,20 +13,22 @@ router = APIRouter(
 @router.get("/")
 async def time_series_models_list() -> list:
     data = get_data('airline')
-    time_series.setup(data, fh=3, session_id=123)
-    return time_series.models().index.tolist()
+    exp = time_series.TSForecastingExperiment
+    exp.setup(data, fh=3, session_id=123)
+    return exp.models().index.tolist()
 
 
 @router.get("/compare_models")
 async def model_compare() -> dict:
     data = get_data('airline')
-    time_series.setup(data, fh=3, session_id=123)
+    exp = time_series.TSForecastingExperiment()
+    exp.setup(data, fh=3, session_id=123)
 
     # Compare all models
-    models = time_series.compare_models()
+    models = exp.compare_models()
 
     # Retrieve the latest displayed table with model comparison metrics
-    comparison_results = time_series.pull()
+    comparison_results = exp.pull()
 
     # Define the metrics you want to extract
     metrics = ['Model', 'MASE', 'RMSSE', 'MAE', 'RMSE', 'MAPE', 'SMAPE', 'R2', 'TT (Sec)']

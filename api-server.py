@@ -1,11 +1,9 @@
 import os
-
 import anyio
 from dotenv import load_dotenv
 from hypercorn.asyncio import serve
 from hypercorn.config import Config
-
-from old_main import app
+from main import app
 
 load_dotenv()
 
@@ -36,7 +34,7 @@ async def main():
     """
     config = load_config()
     async with anyio.create_task_group() as task_group:
-        await task_group.spawn(serve, app, config)
+        task_group.start_soon(serve, app, config)
 
 
 if __name__ == "__main__":

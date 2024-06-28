@@ -13,20 +13,22 @@ router = APIRouter(
 @router.get("/")
 async def regression_models_list() -> list:
     data = get_data('insurance')
-    regression.setup(data, target='charges', session_id=123, log_experiment=True, experiment_name='insurance1')
-    return regression.models().index.tolist()
+    exp = regression.RegressionExperiment()
+    exp.setup(data, target='charges', session_id=123, log_experiment=True, experiment_name='insurance1')
+    return exp.models().index.tolist()
 
 
 @router.get("/compare_models")
 async def model_compare() -> dict:
     data = get_data('insurance')
-    regression.setup(data, target='charges', session_id=123, log_experiment=True, experiment_name='insurance1')
+    exp = regression.RegressionExperiment()
+    exp.setup(data, target='charges', session_id=123, log_experiment=True, experiment_name='insurance1')
 
     # Compare all models
-    models = regression.compare_models()
+    models = exp.compare_models()
 
     # Retrieve the latest displayed table with model comparison metrics
-    comparison_results = regression.pull()
+    comparison_results = exp.pull()
 
     # Define the metrics you want to extract
     metrics = ['Model', 'MAE', 'MSE', 'RMSE', 'R2', 'RMSLE', 'MAPE', 'TT (Sec)']

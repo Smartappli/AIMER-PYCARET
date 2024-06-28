@@ -1,3 +1,5 @@
+from typing import Any, List
+
 import pycaret.anomaly as anomaly
 from pycaret.datasets import get_data
 
@@ -11,7 +13,16 @@ router = APIRouter(
 
 
 @router.get("/")
-async def anomaly_detection_models_list() -> list:
+async def anomaly_detection_models_list() -> List:
     data = get_data('anomaly')
-    anomaly.setup(data, session_id = 123)
-    return anomaly.models().index.tolist()
+    exp = anomaly.AnomalyExperiment()
+    exp.setup(data, session_id=123)
+    return exp.models().index.tolist()
+
+
+@router.post("/create_model")
+async def create_model() -> Any:
+    data = get_data('juice')
+    anomaly.setup(data, session_id=123)
+
+    anomaly.create_model('lr', return_train_score=True)
