@@ -37,7 +37,7 @@ jobs:
            
       - name: Coverage Tests
         run: | 
-          python -m pytest tests/ --verbose -n auto --color=yes
+          python -m pytest tests/ --verbose --color=yes
           
   Ruff:
     name: Ruff - Linter
