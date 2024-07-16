@@ -287,7 +287,6 @@ class ClassificationParams(BaseModel):
 
 
 class ClusteringSetup(BaseModel):
-
     class Config:
         arbitrary_types_allowed = True
 
