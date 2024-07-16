@@ -10,6 +10,7 @@ app.include_router(clustering.router)
 
 client = TestClient(app)
 
+
 @pytest.mark.anyio
 async def test_clustering_models_list():
     async with AsyncClient(app=app, base_url="http://test") as ac:

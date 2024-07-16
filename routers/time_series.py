@@ -12,7 +12,7 @@ router = APIRouter(
 
 @router.get("/")
 async def time_series_models_list() -> list:
-    data = get_data('airline')
+    data = get_data("airline")
     exp = time_series.TSForecastingExperiment
     exp.setup(data, fh=3, session_id=123)
     return exp.models().index.tolist()
@@ -20,7 +20,7 @@ async def time_series_models_list() -> list:
 
 @router.get("/compare_models")
 async def model_compare() -> dict:
-    data = get_data('airline')
+    data = get_data("airline")
     exp = time_series.TSForecastingExperiment()
     exp.setup(data, fh=3, session_id=123)
 
@@ -31,16 +31,28 @@ async def model_compare() -> dict:
     comparison_results = exp.pull()
 
     # Define the metrics you want to extract
-    metrics = ['Model', 'MASE', 'RMSSE', 'MAE', 'RMSE', 'MAPE', 'SMAPE', 'R2', 'TT (Sec)']
+    metrics = [
+        "Model",
+        "MASE",
+        "RMSSE",
+        "MAE",
+        "RMSE",
+        "MAPE",
+        "SMAPE",
+        "R2",
+        "TT (Sec)",
+    ]
 
     # Add an 'ID' column to the DataFrame
     comparison_results.reset_index(inplace=True)
-    comparison_results.rename(columns={'index': 'ID'}, inplace=True)
+    comparison_results.rename(columns={"index": "ID"}, inplace=True)
 
     # Check which metrics are available in the results
-    available_metrics = ['ID'] + [metric for metric in metrics if metric in comparison_results.columns]
+    available_metrics = ["ID"] + [
+        metric for metric in metrics if metric in comparison_results.columns
+    ]
 
     # Extracting detailed information from the comparison results
-    model_info = comparison_results[available_metrics].to_dict(orient='records')
+    model_info = comparison_results[available_metrics].to_dict(orient="records")
 
     return {"result": model_info}
