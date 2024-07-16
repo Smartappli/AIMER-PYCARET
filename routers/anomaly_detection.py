@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.get("/")
 async def anomaly_detection_models_list() -> List:
-    data = get_data('anomaly')
+    data = get_data("anomaly")
     exp = anomaly.AnomalyExperiment()
     exp.setup(data, session_id=123)
     return exp.models().index.tolist()
@@ -22,7 +22,7 @@ async def anomaly_detection_models_list() -> List:
 
 @router.post("/create_model")
 async def create_model() -> Any:
-    data = get_data('juice')
+    data = get_data("juice")
     anomaly.setup(data, session_id=123)
 
-    anomaly.create_model('lr', return_train_score=True)
+    anomaly.create_model("lr", return_train_score=True)
