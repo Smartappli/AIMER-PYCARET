@@ -27,6 +27,6 @@ werkzeug>=2.2 # not directly required, pinned by Snyk to avoid a vulnerability
 urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
 anyio~=4.4.0
 joblib~=1.4.2
-scipy~=1.11.4
+scipy~=1.14.1
 sktime~=0.32.0
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
