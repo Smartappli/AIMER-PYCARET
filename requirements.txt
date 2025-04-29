@@ -7,7 +7,7 @@ opentelemetry-exporter-otlp
 opentelemetry-instrumentation-fastapi
 opentelemetry-instrumentation-system_metrics
 pandas<2.3.0
-python-dotenv==1.0.1
+python-dotenv==1.1.0
 pycaret>=3.3.2
 pydantic>=2.7.0,<3.0.0
 prophet>=1.1.5
