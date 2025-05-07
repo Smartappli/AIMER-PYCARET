@@ -12,7 +12,7 @@ pycaret>=3.3.2
 pydantic>=2.7.0,<3.0.0
 prophet>=1.1.5
 lightgbm>=4.3.0
-captum==0.7.0
+captum==0.8.0
 PyJWT==2.10.1
 flask>=2.2.5 # not directly required, pinned by Snyk to avoid a vulnerability
 fonttools>=4.43.0 # not directly required, pinned by Snyk to avoid a vulnerability
