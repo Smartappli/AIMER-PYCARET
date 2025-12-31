@@ -1,4 +1,4 @@
-fastapi>=0.122.0,<0.123.0
+fastapi>=0.128.0,<0.129.0
 hypercorn>=0.17.3
 loguru==0.7.3
 opentelemetry-api==1.38.0
