@@ -1,7 +1,7 @@
 fastapi>=0.135.1,<0.136.0
 hypercorn>=0.17.3
 loguru==0.7.3
-opentelemetry-api==1.39.1
+opentelemetry-api==1.40.0
 opentelemetry-sdk==1.40.0
 opentelemetry-exporter-otlp
 opentelemetry-instrumentation-fastapi
