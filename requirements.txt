@@ -30,5 +30,7 @@ joblib~=1.5.3
 scipy~=1.17.0
 sktime~=0.40.1
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
+holidays>=0.45 # not directly required, pinned by Snyk to avoid a vulnerability
 torch>=2.6.0 # not directly required, pinned by Snyk to avoid a vulnerability
+wheel>=0.38.0 # not directly required, pinned by Snyk to avoid a vulnerability
 protobuf>=6.33.5 # not directly required, pinned by Snyk to avoid a vulnerability
