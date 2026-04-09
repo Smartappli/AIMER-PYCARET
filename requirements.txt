@@ -1,35 +1,36 @@
-fastapi>=0.111.0,<0.116.0
+fastapi>=0.135.1,<0.136.0
 hypercorn>=0.17.3
 loguru==0.7.3
-opentelemetry-api==1.30.0
-opentelemetry-sdk==1.30.0
+opentelemetry-api==1.40.0
+opentelemetry-sdk==1.40.0
 opentelemetry-exporter-otlp
 opentelemetry-instrumentation-fastapi
 opentelemetry-instrumentation-system_metrics
-pandas<2.3.0
-python-dotenv==1.0.1
+pandas<3.0.2
+python-dotenv==1.2.2
 pycaret>=3.3.2
 pydantic>=2.7.0,<3.0.0
 prophet>=1.1.5
 lightgbm>=4.3.0
-captum==0.7.0
-PyJWT==2.10.1
-flask>=2.2.5 # not directly required, pinned by Snyk to avoid a vulnerability
+captum==0.8.0
+PyJWT==2.12.0
+flask>=3.1.3 # not directly required, pinned by Snyk to avoid a vulnerability
 fonttools>=4.43.0 # not directly required, pinned by Snyk to avoid a vulnerability
 ipython>=8.10.0 # not directly required, pinned by Snyk to avoid a vulnerability
 numpy>=1.22.2 # not directly required, pinned by Snyk to avoid a vulnerability
 orjson>=3.9.15 # not directly required, pinned by Snyk to avoid a vulnerability
 pillow>=10.3.0 # not directly required, pinned by Snyk to avoid a vulnerability
-requests>=2.32.2 # not directly required, pinned by Snyk to avoid a vulnerability
-scikit-learn>=1.4.0,<1.7.0 # not directly required, pinned by Snyk to avoid a vulnerability
-setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
+requests>=2.32.4 # not directly required, pinned by Snyk to avoid a vulnerability
+scikit-learn>=1.8.0,<1.9.0 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=78.1.1 # not directly required, pinned by Snyk to avoid a vulnerability
 werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
 urllib3>=2.2.2 # not directly required, pinned by Snyk to avoid a vulnerability
-anyio~=4.8.0
-joblib~=1.4.2
-scipy~=1.15.1
-sktime~=0.36.0
+anyio~=4.12.0
+joblib~=1.5.3
+scipy~=1.17.0
+sktime~=0.40.1
 zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
 holidays>=0.45 # not directly required, pinned by Snyk to avoid a vulnerability
-torch>=2.2.0 # not directly required, pinned by Snyk to avoid a vulnerability
+torch>=2.6.0 # not directly required, pinned by Snyk to avoid a vulnerability
 wheel>=0.38.0 # not directly required, pinned by Snyk to avoid a vulnerability
+protobuf>=6.33.5 # not directly required, pinned by Snyk to avoid a vulnerability
