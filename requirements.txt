@@ -6,7 +6,7 @@ opentelemetry-sdk==1.41.1
 opentelemetry-exporter-otlp
 opentelemetry-instrumentation-fastapi
 opentelemetry-instrumentation-system_metrics
-pandas<3.0.3
+pandas<3.0.6
 python-dotenv==1.2.2
 pycaret>=3.3.2
 pydantic>=2.7.0,<3.0.0
